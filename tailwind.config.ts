@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,25 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// BCP colors
+				bcp: {
+					'red': '#ed1c24',
+					'orange': '#ff7800',
+					'blue': '#00a1df',
+					'light-gray': '#f2f2f2',
+					'dark-gray': '#4d4d4d',
+				},
+				// WhatsApp colors
+				whatsapp: {
+					'green': '#25D366',
+					'light-green': '#DCF8C6',
+					'bg': '#E5DDD5',
+					'blue': '#34B7F1',
 				}
+			},
+			backgroundImage: {
+				'chat-pattern': "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAGklEQVQ4y2NgGAVDABiExH8GgsygHjAaBP8BATH3AQ36qZ/5AAAAAElFTkSuQmCC')",
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +103,21 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-soft': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.7' },
+				},
+				'bounce-small': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-4px)' },
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-soft': 'pulse-soft 1.5s infinite',
+				'bounce-small': 'bounce-small 1s infinite',
 			}
 		}
 	},
