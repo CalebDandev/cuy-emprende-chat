@@ -9,6 +9,8 @@ import ChallengeCard, { Challenge } from "./ChallengeCard";
 import CoursesRoadmap, { Course } from "./CoursesRoadmap";
 import CuyCoins from "./CuyCoins";
 import ProgressIndicator from "./ProgressIndicator";
+import RiskIndicator from "./RiskIndicator";
+import TestimonialCard from "./TestimonialCard";
 
 interface ConversationSection {
   id: string;
@@ -19,7 +21,7 @@ interface ConversationSection {
   }[];
   challenge?: Challenge;
   courses?: Course[];
-  component?: "progress" | "challenge" | "roadmap" | "reward";
+  component?: "progress" | "challenge" | "roadmap" | "reward" | "risk" | "testimonial";
   componentProps?: any;
 }
 
@@ -69,9 +71,12 @@ const ChatInterface: React.FC = () => {
   const [cuyCoins, setCuyCoins] = useState(0);
   const [showReward, setShowReward] = useState(false);
   const [userName, setUserName] = useState("");
+  const [businessType, setBusinessType] = useState("");
+  const [businessLocation, setBusinessLocation] = useState("");
+  const [riskLevel, setRiskLevel] = useState<"low" | "medium" | "high">("medium");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  // Sample conversation flow
+  // Conversación ampliada con los nuevos flujos
   const conversationFlow: ConversationSection[] = [
     {
       id: "welcome",
@@ -108,6 +113,111 @@ const ChatInterface: React.FC = () => {
         { label: "Servicios", value: "services" },
         { label: "Manufactura", value: "manufacturing" },
         { label: "Otro", value: "other" },
+      ],
+    },
+    {
+      id: "business-location",
+      messages: [
+        {
+          id: "location-1",
+          content: "Gracias por la información. ¿En qué distrito está ubicado tu negocio?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Lima Centro", value: "lima-center" },
+        { label: "Lima Norte", value: "lima-north" },
+        { label: "Lima Sur", value: "lima-south" },
+        { label: "Lima Este", value: "lima-east" },
+        { label: "Callao", value: "callao" },
+        { label: "Otra región", value: "other-region" },
+      ],
+    },
+    {
+      id: "success-story",
+      messages: [
+        {
+          id: "story-1",
+          content: "¡Perfecto! Antes de comenzar, me gustaría compartir contigo la historia de Carmen, una emprendedora como tú.",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      component: "testimonial",
+      componentProps: {
+        name: "Carmen Rodríguez",
+        business: "Restaurante 'El Buen Sabor'",
+        location: "Villa El Salvador",
+        quote: "Gracias al plan de contingencia que armé con Cuy, pude recuperar mi negocio en solo 2 semanas después de las inundaciones. ¡Ahora tengo todo respaldado y mi negocio está más seguro que nunca!",
+        imageSrc: "https://randomuser.me/api/portraits/women/42.jpg"
+      },
+    },
+    {
+      id: "awareness",
+      messages: [
+        {
+          id: "awareness-1",
+          content: "¿Sabías que el 40% de los negocios no logra recuperarse tras un desastre natural? 😱",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "awareness-2",
+          content: "¡Pero no te preocupes! Estoy aquí para ayudarte a preparar tu negocio y hacerlo más resistente 💪",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "awareness-3",
+          content: "¿Te animas a crear tu plan de contingencia?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "¡Claro que sí! 🚀", value: "ready" },
+        { label: "¿En qué consiste?", value: "more-info" },
+        { label: "Ahora no puedo", value: "later" },
+      ],
+    },
+    {
+      id: "staff-info",
+      messages: [
+        {
+          id: "staff-1",
+          content: "Genial, vamos a entender mejor tu negocio. ¿Tienes trabajadores o gestionas todo tú solo?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Solo yo", value: "solo" },
+        { label: "1-3 trabajadores", value: "small-team" },
+        { label: "4-10 trabajadores", value: "medium-team" },
+        { label: "Más de 10", value: "large-team" },
+      ],
+    },
+    {
+      id: "insurance-info",
+      messages: [
+        {
+          id: "insurance-1",
+          content: "¿Cuentas con algún seguro o respaldo financiero para tu negocio?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, tengo seguro", value: "has-insurance" },
+        { label: "Solo ahorros", value: "savings-only" },
+        { label: "No tengo respaldo", value: "no-backup" },
+        { label: "No estoy seguro", value: "not-sure" },
       ],
     },
     {
@@ -152,6 +262,23 @@ const ChatInterface: React.FC = () => {
       ],
     },
     {
+      id: "emergency-contacts",
+      messages: [
+        {
+          id: "emergency-1",
+          content: "¿Tienes una lista actualizada de contactos de emergencia (proveedores clave, servicios de emergencia, etc.)?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, completa", value: "yes-full" },
+        { label: "Algunos contactos", value: "partial" },
+        { label: "No tengo lista", value: "no" },
+      ],
+    },
+    {
       id: "evaluation-results",
       messages: [
         {
@@ -163,9 +290,26 @@ const ChatInterface: React.FC = () => {
         },
         {
           id: "eval-2",
+          content: "Tu nivel de riesgo actual es:",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      component: "risk",
+      componentProps: {
+        level: "medium",
+        message: "Riesgo medio. ¡Aún estás a tiempo de mejorar tu plan!",
+      },
+    },
+    {
+      id: "progress-indicator",
+      messages: [
+        {
+          id: "progress-1",
           content: "Tu nivel de preparación actual es:",
           type: "received",
           timestamp: new Date(),
+          showAvatar: true,
         },
       ],
       component: "progress",
@@ -198,14 +342,58 @@ const ChatInterface: React.FC = () => {
       },
     },
     {
+      id: "second-challenge",
+      messages: [
+        {
+          id: "second-challenge-1",
+          content: "También te recomiendo este importante reto:",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: false,
+        },
+      ],
+      component: "challenge",
+      challenge: {
+        id: "emergency-contacts",
+        title: "Lista de contactos de emergencia",
+        description: "Registra 5 contactos clave: proveedor principal, servicio técnico, emergencias médicas, bomberos y un contacto alternativo.",
+        status: "not-started",
+        reward: 15,
+        dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+        priority: "high",
+      },
+    },
+    {
+      id: "third-challenge",
+      messages: [
+        {
+          id: "third-challenge-1",
+          content: "Y finalmente, para complementar tu plan básico:",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: false,
+        },
+      ],
+      component: "challenge",
+      challenge: {
+        id: "emergency-kit",
+        title: "Armar mochila de emergencia",
+        description: "Prepara una mochila con linterna, botiquín básico, agua, radio a pilas y documentos importantes.",
+        status: "not-started",
+        reward: 20,
+        dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
+        priority: "medium",
+      },
+    },
+    {
       id: "accept-challenge",
       messages: [
         {
           id: "accept-1",
-          content: "¿Te animas a completar este desafío?",
+          content: "¿Te animas a completar estos desafíos? Recuerda que ganarás Monedas Cuy por cada uno que completes.",
           type: "received",
           timestamp: new Date(),
-          showAvatar: false,
+          showAvatar: true,
         },
       ],
       quickReplies: [
@@ -219,14 +407,14 @@ const ChatInterface: React.FC = () => {
       messages: [
         {
           id: "accepted-1",
-          content: "¡Excelente decisión! Cuando completes este desafío, ganarás 25 Monedas Cuy que podrás usar para desbloquear cursos y recursos exclusivos.",
+          content: "¡Excelente decisión! Cuando completes estos desafíos, ganarás Monedas Cuy que podrás usar para desbloquear cursos y recursos exclusivos.",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
           id: "accepted-2",
-          content: "Te enviaré recordatorios amigables para ayudarte a completarlo. ¿Puedo mostrarte qué podrás hacer con tus Monedas Cuy?",
+          content: "Te enviaré recordatorios amigables para ayudarte a completarlos. ¿Puedo mostrarte qué podrás hacer con tus Monedas Cuy?",
           type: "received",
           timestamp: new Date(),
         },
@@ -265,11 +453,41 @@ const ChatInterface: React.FC = () => {
         },
         {
           id: "course-3",
+          title: "Contactos de Emergencia",
+          description: "Organiza tus contactos clave para momentos críticos",
+          status: "locked",
+          unlockCost: 15,
+        },
+        {
+          id: "course-4",
           title: "Ventas en Emergencias",
           description: "Estrategias para mantener ventas en crisis",
           status: "locked",
           unlockCost: 50,
         },
+      ],
+    },
+    {
+      id: "volunteer-option",
+      messages: [
+        {
+          id: "volunteer-1",
+          content: "¡Una cosa más! ¿Te gustaría convertirte en Mentor Voluntario y ayudar a otros emprendedores compartiendo tu experiencia?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "volunteer-2",
+          content: "Al hacerlo, recibirás un certificado especial del BCP y monedas adicionales.",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "¡Me interesa! 🙋‍♂️", value: "interested" },
+        { label: "¿Qué implica?", value: "more-info" },
+        { label: "Por ahora no", value: "not-now" },
       ],
     },
     {
@@ -295,6 +513,29 @@ const ChatInterface: React.FC = () => {
         coins: 25,
         achievement: "¡Primer desafío completado!",
       },
+    },
+    {
+      id: "weather-alert",
+      messages: [
+        {
+          id: "weather-1",
+          content: "🚨 ALERTA: Se pronostica lluvia intensa en tu zona para esta semana. Te recomiendo revisar tu inventario y protegerlo adecuadamente.",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "weather-2",
+          content: "¿Necesitas consejos sobre cómo proteger tu mercadería?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, por favor", value: "yes-advice" },
+        { label: "Ya estoy preparado", value: "already-prepared" },
+        { label: "No aplica a mi negocio", value: "not-applicable" },
+      ],
     },
     {
       id: "next-steps",
@@ -341,11 +582,16 @@ const ChatInterface: React.FC = () => {
       setLoading(false);
       scrollToBottom();
       
-      // If this section gives a reward, update coins
+      // Si esta sección da una recompensa, actualizar monedas
       if (currentSection.component === "reward" && currentSection.componentProps?.coins) {
         setCuyCoins(prev => prev + currentSection.componentProps.coins);
         setShowReward(true);
         setTimeout(() => setShowReward(false), 3000);
+      }
+
+      // Si esta sección establece el nivel de riesgo
+      if (currentSection.component === "risk" && currentSection.componentProps?.level) {
+        setRiskLevel(currentSection.componentProps.level);
       }
     }, 1000);
   };
@@ -365,7 +611,7 @@ const ChatInterface: React.FC = () => {
     };
 
     setSections(prev => {
-      // Add this message to the current section
+      // Añadir este mensaje a la sección actual
       const updated = [...prev];
       if (updated.length > 0) {
         updated[updated.length - 1] = {
@@ -373,7 +619,7 @@ const ChatInterface: React.FC = () => {
           messages: [...updated[updated.length - 1].messages, newMessage],
         };
       } else {
-        // If no sections yet, create one
+        // Si no hay secciones aún, crear una
         updated.push({
           id: "user-input",
           messages: [newMessage],
@@ -384,19 +630,19 @@ const ChatInterface: React.FC = () => {
 
     setCurrentMessage("");
     
-    // Special handling for username section
+    // Manejo especial para la sección de nombre de usuario
     if (currentSectionIndex === 0) {
       setUserName(currentMessage);
     }
     
-    // Move to the next section
+    // Avanzar a la siguiente sección
     setTimeout(() => {
       setCurrentSectionIndex(prev => prev + 1);
     }, 500);
   };
 
   const handleQuickReply = (value: string) => {
-    // Create a message from the selected quick reply
+    // Crear un mensaje a partir de la respuesta rápida seleccionada
     const quickReplyOption = sections[sections.length - 1].quickReplies?.find(
       option => option.value === value
     );
@@ -410,19 +656,29 @@ const ChatInterface: React.FC = () => {
       };
 
       setSections(prev => {
-        // Add this quick reply as a sent message
+        // Añadir esta respuesta rápida como un mensaje enviado
         const updated = [...prev];
         if (updated.length > 0) {
           updated[updated.length - 1] = {
             ...updated[updated.length - 1],
             messages: [...updated[updated.length - 1].messages, newMessage],
-            quickReplies: undefined, // Remove quick replies after selection
+            quickReplies: undefined, // Eliminar las respuestas rápidas después de la selección
           };
         }
         return updated;
       });
 
-      // Move to the next section
+      // Capturar el tipo de negocio si estamos en esa sección
+      if (currentSectionIndex === 1 && value !== "other") {
+        setBusinessType(quickReplyOption.label);
+      }
+
+      // Capturar la ubicación si estamos en esa sección
+      if (currentSectionIndex === 2) {
+        setBusinessLocation(quickReplyOption.label);
+      }
+
+      // Avanzar a la siguiente sección
       setTimeout(() => {
         setCurrentSectionIndex(prev => prev + 1);
       }, 500);
@@ -430,13 +686,13 @@ const ChatInterface: React.FC = () => {
   };
 
   const handleSelectCourse = (courseId: string) => {
-    // In a real app, this would navigate to the course details
-    console.log("Selected course:", courseId);
+    // En una app real, esto navegaría a los detalles del curso
+    console.log("Curso seleccionado:", courseId);
   };
 
   const handleSelectChallenge = (challengeId: string) => {
-    // In a real app, this would show challenge details
-    console.log("Selected challenge:", challengeId);
+    // En una app real, esto mostraría los detalles del desafío
+    console.log("Desafío seleccionado:", challengeId);
   };
 
   const renderComponent = (component: string, props: any) => {
@@ -460,6 +716,13 @@ const ChatInterface: React.FC = () => {
             </div>
           </div>
         );
+      
+      case "risk":
+        return <RiskIndicator 
+          level={props.level} 
+          message={props.message}
+          className="my-2"
+        />;
       
       case "challenge":
         return props && <ChallengeCard 
@@ -485,6 +748,16 @@ const ChatInterface: React.FC = () => {
             <p className="mt-2 text-sm">¡Monedas Cuy añadidas a tu cuenta!</p>
           </div>
         );
+
+      case "testimonial":
+        return props && <TestimonialCard 
+          name={props.name}
+          business={props.business}
+          location={props.location}
+          quote={props.quote}
+          imageSrc={props.imageSrc}
+          className="my-2"
+        />;
       
       default:
         return null;
