@@ -46,7 +46,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
 
       <div
         className={cn(
-          "chat-bubble",
+          "chat-bubble text-white", // Added text-white here
           type === "received" ? "chat-bubble-received" : "chat-bubble-sent",
           isTyping && "min-w-[4rem]"
         )}
@@ -71,7 +71,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
             <div className={cn(hasEmoji && "text-2xl")}>
               {content}
             </div>
-            <div className="text-[10px] text-gray-500 text-right -mb-1 mt-1">
+            <div className="text-[10px] text-gray-300 text-right -mb-1 mt-1">
               {formattedTime}
             </div>
           </>

@@ -96,15 +96,15 @@
 
 @layer components {
   .whatsapp-chat {
-    @apply bg-[#0e1621] bg-chat-pattern relative; /* Más oscuro como WhatsApp */
+    @apply bg-[#0e1621] bg-chat-pattern relative; 
   }
   
   .chat-bubble {
-    @apply relative rounded-lg px-3 py-2 max-w-[75%] shadow-sm;
+    @apply relative rounded-lg px-3 py-2 max-w-[75%] shadow-sm text-white; /* Added text-white */
   }
   
   .chat-bubble-received {
-    @apply bg-[#1f2c38]; /* Color gris oscuro para mensajes recibidos */
+    @apply bg-[#1f2c38] text-white; /* Explicitly set text color to white */
   }
   
   .chat-bubble-received:before {
@@ -114,7 +114,7 @@
   }
   
   .chat-bubble-sent {
-    @apply bg-[#055d4d]; /* Color verde oscuro para mensajes enviados */
+    @apply bg-[#055d4d] text-white; /* Explicitly set text color to white */
   }
   
   .chat-bubble-sent:before {
@@ -124,10 +124,11 @@
   }
   
   .quick-reply-button {
-    @apply border border-gray-700 bg-[#1f2c38] rounded-full px-4 py-1.5 text-sm font-medium text-gray-200 hover:bg-gray-700 transition-colors mb-2 mr-2 shadow-sm;
+    @apply border border-gray-700 bg-[#1f2c38] rounded-full px-4 py-1.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors mb-2 mr-2 shadow-sm;
   }
   
   .cuy-coin {
     @apply inline-flex items-center justify-center bg-bcp-orange text-white rounded-full;
   }
 }
+
