@@ -79,18 +79,30 @@ const ChatInterface: React.FC = () => {
   // Conversación ampliada con los nuevos flujos
   const conversationFlow: ConversationSection[] = [
     {
-      id: "welcome",
+      id: "intro",
       messages: [
         {
-          id: "welcome-1",
-          content: "¡Hola! Soy Cuy, tu asistente de Contigo Emprendedor BCP 👋",
+          id: "intro-1",
+          content: "¡Hola! Soy Cuy, el asistente virtual de Contigo Emprendedor BCP 👋",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
-          id: "welcome-2",
-          content: "¿Cómo te llamas?",
+          id: "intro-2",
+          content: "Estoy aquí para ayudarte a crear un plan de contingencia para tu negocio y así estar preparado ante cualquier emergencia o desastre que pueda afectar tu emprendimiento.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "intro-3",
+          content: "Si deseas conocer más sobre la iniciativa Contigo Emprendedor o nuestro Mercado Solidario BCP, puedes visitar: https://www.viabcp.com/contigoemprendedor",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "intro-4",
+          content: "Para comenzar, me gustaría conocerte. ¿Cuál es tu nombre?",
           type: "received",
           timestamp: new Date(),
         },
@@ -468,29 +480,6 @@ const ChatInterface: React.FC = () => {
       ],
     },
     {
-      id: "volunteer-option",
-      messages: [
-        {
-          id: "volunteer-1",
-          content: "¡Una cosa más! ¿Te gustaría convertirte en Mentor Voluntario y ayudar a otros emprendedores compartiendo tu experiencia?",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "volunteer-2",
-          content: "Al hacerlo, recibirás un certificado especial del BCP y monedas adicionales.",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-      quickReplies: [
-        { label: "¡Me interesa! 🙋‍♂️", value: "interested" },
-        { label: "¿Qué implica?", value: "more-info" },
-        { label: "Por ahora no", value: "not-now" },
-      ],
-    },
-    {
       id: "challenge-completed",
       messages: [
         {
@@ -526,7 +515,7 @@ const ChatInterface: React.FC = () => {
         },
         {
           id: "weather-2",
-          content: "¿Necesitas consejos sobre cómo proteger tu mercadería?",
+          content: "¿Necesitas consejos sobre cómo proteger tu negocio?",
           type: "received",
           timestamp: new Date(),
         },
@@ -535,6 +524,150 @@ const ChatInterface: React.FC = () => {
         { label: "Sí, por favor", value: "yes-advice" },
         { label: "Ya estoy preparado", value: "already-prepared" },
         { label: "No aplica a mi negocio", value: "not-applicable" },
+      ],
+    },
+    {
+      id: "contingency-plan-retail",
+      messages: [
+        {
+          id: "contingency-retail-1",
+          content: "PLAN DE CONTINGENCIA PARA TIENDA/BODEGA:",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "contingency-retail-2",
+          content: "1️⃣ Eleva tus productos al menos 30cm del suelo usando estantes o pallets",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-retail-3",
+          content: "2️⃣ Protege con plástico impermeable los productos sensibles al agua",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-retail-4",
+          content: "3️⃣ Asegura tu sistema de cobro y respaldo digital en un lugar alto y seco",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-retail-5",
+          content: "4️⃣ Ten a la mano el contacto de tus proveedores principales para reponer inventario rápidamente",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+    },
+    {
+      id: "contingency-plan-restaurant",
+      messages: [
+        {
+          id: "contingency-restaurant-1",
+          content: "PLAN DE CONTINGENCIA PARA RESTAURANTE:",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "contingency-restaurant-2",
+          content: "1️⃣ Almacena los alimentos perecibles en contenedores herméticos y elevados",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-restaurant-3",
+          content: "2️⃣ Verifica las instalaciones eléctricas y protege equipos de cocina",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-restaurant-4",
+          content: "3️⃣ Prepara un menú alternativo que requiera menos ingredientes frescos",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-restaurant-5",
+          content: "4️⃣ Asegura un sistema alternativo para calentar alimentos en caso de corte eléctrico",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+    },
+    {
+      id: "contingency-plan-services",
+      messages: [
+        {
+          id: "contingency-services-1",
+          content: "PLAN DE CONTINGENCIA PARA SERVICIOS:",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "contingency-services-2",
+          content: "1️⃣ Respalda todos tus archivos y documentos digitales en la nube",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-services-3",
+          content: "2️⃣ Prepara un sistema para trabajar remotamente si no puedes acceder a tu local",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-services-4",
+          content: "3️⃣ Ten un banco de baterías o generador para mantener tus equipos funcionando",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-services-5",
+          content: "4️⃣ Comunica a tus clientes por anticipado posibles retrasos o cambios en la entrega",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+    },
+    {
+      id: "contingency-plan-manufacturing",
+      messages: [
+        {
+          id: "contingency-manufacturing-1",
+          content: "PLAN DE CONTINGENCIA PARA MANUFACTURA:",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "contingency-manufacturing-2",
+          content: "1️⃣ Protege tu maquinaria con cubiertas impermeables y elévala si es posible",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-manufacturing-3",
+          content: "2️⃣ Almacena materias primas en contenedores sellados y en altura",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-manufacturing-4",
+          content: "3️⃣ Identifica proveedores alternativos para tus insumos principales",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-manufacturing-5",
+          content: "4️⃣ Adelanta producción de productos clave si se acerca la temporada de lluvias",
+          type: "received",
+          timestamp: new Date(),
+        },
       ],
     },
     {
@@ -678,7 +811,33 @@ const ChatInterface: React.FC = () => {
         setBusinessLocation(quickReplyOption.label);
       }
 
-      // Avanzar a la siguiente sección
+      // Lógica especial para el plan de contingencia según el tipo de negocio
+      if (currentSectionIndex === 14 && value === "yes-advice") {
+        // Ajustar el índice de la siguiente sección basado en el tipo de negocio
+        if (businessType === "Tienda / Bodega") {
+          setTimeout(() => {
+            setCurrentSectionIndex(15); // índice de contingency-plan-retail
+          }, 500);
+          return;
+        } else if (businessType === "Restaurante") {
+          setTimeout(() => {
+            setCurrentSectionIndex(16); // índice de contingency-plan-restaurant
+          }, 500);
+          return;
+        } else if (businessType === "Servicios") {
+          setTimeout(() => {
+            setCurrentSectionIndex(17); // índice de contingency-plan-services
+          }, 500);
+          return;
+        } else if (businessType === "Manufactura") {
+          setTimeout(() => {
+            setCurrentSectionIndex(18); // índice de contingency-plan-manufacturing
+          }, 500);
+          return;
+        }
+      }
+
+      // Avanzar a la siguiente sección (comportamiento normal)
       setTimeout(() => {
         setCurrentSectionIndex(prev => prev + 1);
       }, 500);
@@ -699,20 +858,20 @@ const ChatInterface: React.FC = () => {
     switch (component) {
       case "progress":
         return (
-          <div className="bg-white rounded-lg p-4 my-2 shadow-sm">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">
+          <div className="bg-[#1f2c38] rounded-lg p-4 my-2 shadow-sm">
+            <h4 className="text-sm font-medium text-gray-200 mb-2">
               Nivel de preparación
             </h4>
-            <div className="w-full h-3 bg-gray-200 rounded-full">
+            <div className="w-full h-3 bg-gray-700 rounded-full">
               <div 
                 className="h-full bg-bcp-blue rounded-full transition-all duration-1000"
                 style={{ width: `${props.progress}%` }}
               ></div>
             </div>
             <div className="flex justify-between mt-1">
-              <span className="text-xs text-gray-500">{props.level}</span>
-              <span className="text-xs font-medium">{props.progress}%</span>
-              <span className="text-xs text-gray-500">→ {props.nextLevel}</span>
+              <span className="text-xs text-gray-400">{props.level}</span>
+              <span className="text-xs font-medium text-gray-300">{props.progress}%</span>
+              <span className="text-xs text-gray-400">→ {props.nextLevel}</span>
             </div>
           </div>
         );
@@ -769,9 +928,9 @@ const ChatInterface: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gray-100">
+    <div className="flex flex-col h-full bg-[#0e1621]">
       {/* Header */}
-      <div className="bg-bcp-red text-white px-4 py-3 flex items-center justify-between shadow-md">
+      <div className="bg-[#1f2c38] text-white px-4 py-3 flex items-center justify-between shadow-md">
         <div className="flex items-center">
           <ArrowLeft className="w-5 h-5 mr-3" />
           <CuyAvatar />
@@ -839,8 +998,8 @@ const ChatInterface: React.FC = () => {
       </div>
 
       {/* Input Area */}
-      <div className="bg-white p-2 px-4 flex items-center border-t">
-        <button className="text-gray-500 mr-2">
+      <div className="bg-[#1f2c38] p-2 px-4 flex items-center border-t border-gray-800">
+        <button className="text-gray-400 mr-2">
           <Paperclip className="w-5 h-5" />
         </button>
         
@@ -849,19 +1008,19 @@ const ChatInterface: React.FC = () => {
           value={currentMessage}
           onChange={(e) => setCurrentMessage(e.target.value)}
           placeholder={userName ? `Escribe un mensaje, ${userName}...` : "Escribe un mensaje..."}
-          className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:border-bcp-blue"
+          className="flex-1 border border-gray-700 rounded-full px-4 py-2 focus:outline-none focus:border-bcp-blue bg-[#323b45] text-white"
           onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
         />
         
         {currentMessage ? (
           <button
-            className="ml-2 bg-bcp-red rounded-full p-2 text-white"
+            className="ml-2 bg-[#00a884] rounded-full p-2 text-white"
             onClick={handleSendMessage}
           >
             <Send className="w-5 h-5" />
           </button>
         ) : (
-          <button className="ml-2 text-gray-500">
+          <button className="ml-2 text-gray-400">
             <Mic className="w-5 h-5" />
           </button>
         )}
