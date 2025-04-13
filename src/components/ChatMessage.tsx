@@ -13,6 +13,7 @@ export interface ChatMessageProps {
   showAvatar?: boolean;
   isTyping?: boolean;
   className?: string;
+  isPin?: boolean;
 }
 
 const ChatMessage: React.FC<ChatMessageProps> = ({
@@ -23,6 +24,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
   hasImage,
   showAvatar = false,
   isTyping = false,
+  isPin = false,
   className,
 }) => {
   const formattedTime = timestamp.toLocaleTimeString([], {
@@ -48,7 +50,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
         className={cn(
           "chat-bubble",
           type === "received" ? "chat-bubble-received" : "chat-bubble-sent",
-          isTyping && "min-w-[4rem]"
+          isTyping && "min-w-[4rem]",
+          isPin && "font-mono tracking-wider text-lg"
         )}
       >
         {isTyping ? (
@@ -71,7 +74,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
             <div className={cn(hasEmoji && "text-2xl")}>
               {content}
             </div>
-            <div className="text-[10px] text-gray-300 text-right -mb-1 mt-1">
+            <div className="text-[10px] text-gray-500 text-right -mb-1 mt-1">
               {formattedTime}
             </div>
           </>

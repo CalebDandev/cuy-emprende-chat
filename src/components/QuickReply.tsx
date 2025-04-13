@@ -21,7 +21,7 @@ const QuickReply: React.FC<QuickReplyProps> = ({
       {options.map((option) => (
         <button
           key={option.value}
-          className="quick-reply-button"
+          className="bg-white text-gray-700 px-4 py-2 rounded-full border border-gray-300 shadow-sm hover:bg-gray-100 transition-colors text-sm font-medium"
           onClick={() => onSelect(option.value)}
         >
           {option.label}

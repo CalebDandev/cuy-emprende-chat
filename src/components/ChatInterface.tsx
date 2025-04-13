@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import ChatMessage, { ChatMessageProps } from "./ChatMessage";
 import QuickReply from "./QuickReply";
 import CuyAvatar from "./CuyAvatar";
-import { Send, Paperclip, Mic, ArrowLeft, MoreVertical } from "lucide-react";
+import { Send, Paperclip, Mic, ArrowLeft, MoreVertical, ExternalLink } from "lucide-react";
 import ChallengeCard, { Challenge } from "./ChallengeCard";
 import CoursesRoadmap, { Course } from "./CoursesRoadmap";
 import CuyCoins from "./CuyCoins";
@@ -20,8 +20,9 @@ interface ConversationSection {
     value: string;
   }[];
   challenge?: Challenge;
+  challenges?: Challenge[];
   courses?: Course[];
-  component?: "progress" | "challenge" | "roadmap" | "reward" | "risk" | "testimonial";
+  component?: "progress" | "challenge" | "challenges" | "roadmap" | "reward" | "risk" | "testimonial";
   componentProps?: any;
 }
 
@@ -75,16 +76,21 @@ const ChatInterface: React.FC = () => {
   const [businessLocation, setBusinessLocation] = useState("Lima Norte"); // Default location
   const [correctInfo, setCorrectInfo] = useState(false);
   const [riskLevel, setRiskLevel] = useState<"low" | "medium" | "high">("medium");
+  const [verifyingPin, setVerifyingPin] = useState(false);
+  const [expectedPin, setExpectedPin] = useState("");
+  const [currentChallenge, setCurrentChallenge] = useState("");
+  const [waitingForReadyConfirmation, setWaitingForReadyConfirmation] = useState(false);
+  const [damageAssessment, setDamageAssessment] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  // Conversación ampliada con los nuevos flujos
+  // Conversation flow
   const conversationFlow: ConversationSection[] = [
     {
       id: "intro",
       messages: [
         {
           id: "intro-1",
-          content: "¡Hola Caleb! Soy Cuy, el asistente virtual de Contigo Emprendedor BCP 👋",
+          content: `¡Hola ${userName}! Soy Cuy, el asistente virtual de Contigo Emprendedor BCP 👋`,
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
@@ -103,7 +109,7 @@ const ChatInterface: React.FC = () => {
         },
         {
           id: "intro-4",
-          content: "Según nuestros registros, tienes un Restaurante ubicado en Lima Norte. ¿Es correcta esta información?",
+          content: `Según nuestros registros, tienes un ${businessType} ubicado en ${businessLocation}. ¿Es correcta esta información?`,
           type: "received",
           timestamp: new Date(),
         },
@@ -202,6 +208,52 @@ const ChatInterface: React.FC = () => {
       ],
     },
     {
+      id: "plan-explanation",
+      messages: [
+        {
+          id: "explanation-1",
+          content: "Un plan de contingencia es una estrategia que te ayuda a prepararte para situaciones de emergencia y minimizar su impacto en tu negocio.",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "explanation-2",
+          content: "Incluye la identificación de riesgos específicos para tu tipo de negocio, protocolos de acción ante emergencias, resguardo de información crítica, y estrategias para mantener operaciones básicas durante una crisis.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "explanation-3",
+          content: "¡Lo mejor es que te guiaré paso a paso con desafíos simples que podrás completar gradualmente!",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "explanation-4",
+          content: "¿Te gustaría empezar ahora?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "¡Vamos a empezar! 💪", value: "start-now" },
+        { label: "Ahora no puedo", value: "later" },
+      ],
+    },
+    {
+      id: "waiting-for-ready",
+      messages: [
+        {
+          id: "waiting-1",
+          content: "Entiendo que ahora no puedas. Cuando estés listo, solo escribe \"Estoy listo\" y continuaremos con tu plan de contingencia.",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+    },
+    {
       id: "staff-info",
       messages: [
         {
@@ -296,11 +348,63 @@ const ChatInterface: React.FC = () => {
       ],
     },
     {
+      id: "backup-data",
+      messages: [
+        {
+          id: "backup-1",
+          content: "¿Con qué frecuencia respaldas la información importante de tu negocio (ventas, clientes, inventario)?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Diariamente", value: "daily" },
+        { label: "Semanalmente", value: "weekly" },
+        { label: "Ocasionalmente", value: "occasionally" },
+        { label: "Nunca", value: "never" },
+      ],
+    },
+    {
+      id: "equipment-protection",
+      messages: [
+        {
+          id: "equipment-1",
+          content: "¿Tienes medidas para proteger equipos e infraestructura crítica en caso de emergencias (elevadores, protección contra agua, etc.)?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, completas", value: "yes-full" },
+        { label: "Algunas medidas", value: "partial" },
+        { label: "No tengo medidas", value: "no" },
+      ],
+    },
+    {
+      id: "recovery-plan",
+      messages: [
+        {
+          id: "recovery-1",
+          content: "¿Has pensado en cómo seguirías operando si tu local sufre daños graves?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Tengo plan alternativo", value: "yes-full" },
+        { label: "Lo he considerado", value: "partial" },
+        { label: "No he pensado en ello", value: "no" },
+      ],
+    },
+    {
       id: "evaluation-results",
       messages: [
         {
           id: "eval-1",
-          content: "¡Gracias por tus respuestas! Basado en ellas, he preparado un diagnóstico rápido de tu preparación ante emergencias.",
+          content: "¡Gracias por tus respuestas! Basado en ellas, he preparado un diagnóstico de tu preparación ante emergencias.",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
@@ -337,70 +441,158 @@ const ChatInterface: React.FC = () => {
       },
     },
     {
-      id: "first-challenge",
+      id: "challenges",
       messages: [
         {
-          id: "challenge-1",
-          content: "Para ayudarte a mejorar tu preparación, te propongo un desafío simple pero importante:",
+          id: "challenges-1",
+          content: "Para ayudarte a mejorar tu preparación, te propongo estos desafíos importantes:",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
       ],
-      component: "challenge",
-      challenge: {
-        id: "challenge-inventory",
-        title: "Crear inventario digital básico",
-        description: "Registra tus 10 productos/servicios principales con foto, precio y cantidad disponible.",
-        status: "not-started",
-        reward: 25,
-        dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        priority: "medium",
-      },
-    },
-    {
-      id: "second-challenge",
-      messages: [
+      component: "challenges",
+      challenges: [
+        // Restaurante desafíos
         {
-          id: "second-challenge-1",
-          content: "También te recomiendo este importante reto:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: false,
+          id: "restaurant-inventory",
+          title: "Inventario digital de insumos críticos",
+          description: "Registra tus 10 insumos/productos más importantes incluyendo proveedor, cantidad mínima requerida y alternativas.",
+          status: "not-started",
+          reward: 25,
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          priority: "high",
+          businessType: "Restaurante",
+        },
+        {
+          id: "restaurant-emergency-kit",
+          title: "Kit de emergencia para restaurante",
+          description: "Prepara un kit con extintor, botiquín, linternas, radio y protocolos básicos de evacuación para clientes.",
+          status: "not-started",
+          reward: 20,
+          dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
+          priority: "medium",
+          businessType: "Restaurante",
+        },
+        {
+          id: "restaurant-contacts",
+          title: "Red de emergencia gastronómica",
+          description: "Crea una lista de contactos incluyendo: proveedores alternos, técnicos para equipos de refrigeración y socios potenciales para uso compartido de cocina.",
+          status: "not-started",
+          reward: 15,
+          dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+          priority: "high",
+          businessType: "Restaurante",
+        },
+        
+        // Retail desafíos
+        {
+          id: "retail-inventory",
+          title: "Inventario digital prioritario",
+          description: "Registra tus 20 productos de mayor rotación y margen con fotos, cantidad y ubicación de almacenamiento alternativo.",
+          status: "not-started",
+          reward: 25,
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          priority: "high",
+          businessType: "Tienda / Bodega",
+        },
+        {
+          id: "retail-emergency-kit",
+          title: "Kit de protección de mercadería",
+          description: "Prepara plásticos impermeables, estantes elevados y un plan de evacuación rápida para productos de alto valor.",
+          status: "not-started",
+          reward: 20,
+          dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
+          priority: "medium",
+          businessType: "Tienda / Bodega",
+        },
+        {
+          id: "retail-contacts",
+          title: "Red de distribución alternativa",
+          description: "Crea una lista de contactos incluyendo: proveedores mayoristas alternos, transportistas locales y puntos de venta móviles posibles.",
+          status: "not-started",
+          reward: 15,
+          dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+          priority: "high",
+          businessType: "Tienda / Bodega",
+        },
+        
+        // Servicios desafíos
+        {
+          id: "services-digital-backup",
+          title: "Sistema de respaldo en la nube",
+          description: "Implementa un sistema de backup automático para todos tus archivos de clientes y documentos importantes.",
+          status: "not-started",
+          reward: 25,
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          priority: "high",
+          businessType: "Servicios",
+        },
+        {
+          id: "services-remote-setup",
+          title: "Configuración para trabajo remoto",
+          description: "Establece un sistema que permita a tu equipo trabajar desde cualquier ubicación con acceso seguro a sistemas críticos.",
+          status: "not-started",
+          reward: 20,
+          dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
+          priority: "medium",
+          businessType: "Servicios",
+        },
+        {
+          id: "services-contacts",
+          title: "Red de soporte técnico",
+          description: "Crea una lista de técnicos y especialistas que puedan restablecer tus sistemas críticos en menos de 24 horas.",
+          status: "not-started",
+          reward: 15,
+          dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+          priority: "high",
+          businessType: "Servicios",
+        },
+        
+        // Manufactura desafíos
+        {
+          id: "manufacturing-equipment",
+          title: "Protección de maquinaria crítica",
+          description: "Implementa protecciones físicas contra agua y sistemas de elevación para tus máquinas más importantes.",
+          status: "not-started",
+          reward: 25,
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          priority: "high",
+          businessType: "Manufactura",
+        },
+        {
+          id: "manufacturing-materials",
+          title: "Almacenamiento seguro de materiales",
+          description: "Organiza un sistema de almacenamiento elevado y protegido para tus materias primas más valiosas o difíciles de reponer.",
+          status: "not-started",
+          reward: 20,
+          dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
+          priority: "medium",
+          businessType: "Manufactura",
+        },
+        {
+          id: "manufacturing-contacts",
+          title: "Red de proveedores alternativos",
+          description: "Establece relación con al menos dos proveedores alternativos para cada materia prima crítica en tu producción.",
+          status: "not-started",
+          reward: 15,
+          dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+          priority: "high",
+          businessType: "Manufactura",
+        },
+        
+        // General desafíos (para cualquier tipo)
+        {
+          id: "emergency-contacts",
+          title: "Lista de contactos de emergencia",
+          description: "Registra 5 contactos clave: proveedor principal, servicio técnico, emergencias médicas, bomberos y un contacto alternativo.",
+          status: "not-started",
+          reward: 15,
+          dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+          priority: "high",
+          businessType: "general",
         },
       ],
-      component: "challenge",
-      challenge: {
-        id: "emergency-contacts",
-        title: "Lista de contactos de emergencia",
-        description: "Registra 5 contactos clave: proveedor principal, servicio técnico, emergencias médicas, bomberos y un contacto alternativo.",
-        status: "not-started",
-        reward: 15,
-        dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-        priority: "high",
-      },
-    },
-    {
-      id: "third-challenge",
-      messages: [
-        {
-          id: "third-challenge-1",
-          content: "Y finalmente, para complementar tu plan básico:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: false,
-        },
-      ],
-      component: "challenge",
-      challenge: {
-        id: "emergency-kit",
-        title: "Armar mochila de emergencia",
-        description: "Prepara una mochila con linterna, botiquín básico, agua, radio a pilas y documentos importantes.",
-        status: "not-started",
-        reward: 20,
-        dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
-        priority: "medium",
-      },
     },
     {
       id: "accept-challenge",
@@ -414,73 +606,78 @@ const ChatInterface: React.FC = () => {
         },
       ],
       quickReplies: [
-        { label: "¡Claro que sí! 💪", value: "accept" },
+        { label: "¡Empezar primer desafío! 💪", value: "start-first" },
         { label: "¿Cómo lo hago?", value: "how-to" },
         { label: "Ahora no puedo", value: "later" },
       ],
     },
     {
-      id: "challenge-accepted",
+      id: "how-to-challenges",
       messages: [
         {
-          id: "accepted-1",
-          content: "¡Excelente decisión! Cuando completes estos desafíos, ganarás Monedas Cuy que podrás usar para desbloquear cursos y recursos exclusivos.",
+          id: "how-to-1",
+          content: "¡Es muy sencillo! Para cada desafío te enviaré un enlace a una página donde podrás completarlo paso a paso.",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
-          id: "accepted-2",
-          content: "Te enviaré recordatorios amigables para ayudarte a completarlos. ¿Puedo mostrarte qué podrás hacer con tus Monedas Cuy?",
+          id: "how-to-2",
+          content: "Al terminar cada desafío, la página te dará un PIN que deberás enviarme para verificar que lo has completado y recibir tus Monedas Cuy.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "how-to-3",
+          content: "¿Listo para comenzar con tu primer desafío?",
           type: "received",
           timestamp: new Date(),
         },
       ],
       quickReplies: [
-        { label: "Sí, muéstrame", value: "show-roadmap" },
-        { label: "Después", value: "later" },
+        { label: "¡Vamos! 🚀", value: "start-first" },
+        { label: "Más tarde", value: "later" },
       ],
     },
     {
-      id: "show-roadmap",
+      id: "start-challenge",
       messages: [
         {
-          id: "roadmap-1",
-          content: "¡Perfecto! Este es tu camino de aprendizaje. Podrás desbloquear cursos con las Monedas Cuy que vas ganando:",
+          id: "start-1",
+          content: "¡Excelente elección! Aquí tienes el enlace para tu primer desafío:",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "start-2",
+          content: "Haz clic en el enlace para comenzar:",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+    },
+    {
+      id: "verify-challenge",
+      messages: [
+        {
+          id: "verify-1",
+          content: "¿Ya completaste el desafío? Si es así, por favor ingresa el PIN que recibiste al finalizar:",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
       ],
-      component: "roadmap",
-      courses: [
+    },
+    {
+      id: "incorrect-pin",
+      messages: [
         {
-          id: "course-1",
-          title: "Inventario Digital",
-          description: "Aprende a digitalizar tu inventario de forma sencilla",
-          status: "available",
-          progress: 0,
-        },
-        {
-          id: "course-2",
-          title: "Plan de Crisis",
-          description: "Crea tu plan de acción ante emergencias",
-          status: "locked",
-          unlockCost: 25,
-        },
-        {
-          id: "course-3",
-          title: "Contactos de Emergencia",
-          description: "Organiza tus contactos clave para momentos críticos",
-          status: "locked",
-          unlockCost: 15,
-        },
-        {
-          id: "course-4",
-          title: "Ventas en Emergencias",
-          description: "Estrategias para mantener ventas en crisis",
-          status: "locked",
-          unlockCost: 50,
+          id: "incorrect-pin-1",
+          content: "Ese PIN no parece ser correcto. Por favor, revisa el código e inténtalo nuevamente, o completa el desafío si aún no lo has hecho.",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
         },
       ],
     },
@@ -489,7 +686,7 @@ const ChatInterface: React.FC = () => {
       messages: [
         {
           id: "completed-1",
-          content: "¡FELICITACIONES! 🎉 Has completado tu primer desafío.",
+          content: "¡FELICITACIONES! 🎉 Has completado correctamente el desafío.",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
@@ -505,7 +702,7 @@ const ChatInterface: React.FC = () => {
       component: "reward",
       componentProps: {
         coins: 25,
-        achievement: "¡Primer desafío completado!",
+        achievement: "¡Desafío completado!",
       },
     },
     {
@@ -513,14 +710,14 @@ const ChatInterface: React.FC = () => {
       messages: [
         {
           id: "weather-1",
-          content: "🚨 ALERTA: Se pronostica lluvia intensa en tu zona para esta semana. Te recomiendo revisar tu inventario y protegerlo adecuadamente.",
+          content: "🚨 ALERTA: Se pronostica lluvia intensa en Lima Norte para las próximas 48 horas, con acumulación de hasta 35mm de agua. Se esperan posibles inundaciones en zonas bajas.",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
           id: "weather-2",
-          content: "¿Necesitas consejos sobre cómo proteger tu negocio?",
+          content: "¿Necesitas consejos específicos sobre cómo proteger tu restaurante ante esta situación?",
           type: "received",
           timestamp: new Date(),
         },
@@ -532,147 +729,229 @@ const ChatInterface: React.FC = () => {
       ],
     },
     {
-      id: "contingency-plan-retail",
-      messages: [
-        {
-          id: "contingency-retail-1",
-          content: "PLAN DE CONTINGENCIA PARA TIENDA/BODEGA:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "contingency-retail-2",
-          content: "1️⃣ Eleva tus productos al menos 30cm del suelo usando estantes o pallets",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-retail-3",
-          content: "2️⃣ Protege con plástico impermeable los productos sensibles al agua",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-retail-4",
-          content: "3️⃣ Asegura tu sistema de cobro y respaldo digital en un lugar alto y seco",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-retail-5",
-          content: "4️⃣ Ten a la mano el contacto de tus proveedores principales para reponer inventario rápidamente",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-    },
-    {
       id: "contingency-plan-restaurant",
       messages: [
         {
           id: "contingency-restaurant-1",
-          content: "PLAN DE CONTINGENCIA PARA RESTAURANTE:",
+          content: "PLAN DE CONTINGENCIA PARA TU RESTAURANTE - LLUVIAS INTENSAS:",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
           id: "contingency-restaurant-2",
-          content: "1️⃣ Almacena los alimentos perecibles en contenedores herméticos y elevados",
+          content: "1️⃣ INMEDIATO: Eleva todos los alimentos perecibles al menos 50cm del suelo y usa contenedores herméticos",
           type: "received",
           timestamp: new Date(),
         },
         {
           id: "contingency-restaurant-3",
-          content: "2️⃣ Verifica las instalaciones eléctricas y protege equipos de cocina",
+          content: "2️⃣ INMEDIATO: Desconecta equipos eléctricos de cocina en zonas de riesgo y protégelos con plástico impermeable",
           type: "received",
           timestamp: new Date(),
         },
         {
           id: "contingency-restaurant-4",
-          content: "3️⃣ Prepara un menú alternativo que requiera menos ingredientes frescos",
+          content: "3️⃣ PRÓXIMAS 24H: Prepara un menú reducido que requiera menos ingredientes y equipos para operar",
           type: "received",
           timestamp: new Date(),
         },
         {
           id: "contingency-restaurant-5",
-          content: "4️⃣ Asegura un sistema alternativo para calentar alimentos en caso de corte eléctrico",
+          content: "4️⃣ PRÓXIMAS 24H: Reubica objetos valiosos (POS, documentos, dinero) a zonas altas y secas",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "contingency-restaurant-6",
+          content: "5️⃣ EMERGENCIA: Ten listo el contacto de Indeci (115) y Bomberos (116) en caso de inundación grave",
           type: "received",
           timestamp: new Date(),
         },
       ],
+      quickReplies: [
+        { label: "Gracias por la información", value: "thanks" },
+        { label: "¿Algo más que deba hacer?", value: "more-info" },
+      ],
     },
     {
-      id: "contingency-plan-services",
+      id: "more-contingency-info",
       messages: [
         {
-          id: "contingency-services-1",
-          content: "PLAN DE CONTINGENCIA PARA SERVICIOS:",
+          id: "more-info-1",
+          content: "Consejos adicionales para tu restaurante:",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
-          id: "contingency-services-2",
-          content: "1️⃣ Respalda todos tus archivos y documentos digitales en la nube",
+          id: "more-info-2",
+          content: "• Mantén sacos de arena o barreras improvisadas para desviar agua de la entrada principal",
           type: "received",
           timestamp: new Date(),
         },
         {
-          id: "contingency-services-3",
-          content: "2️⃣ Prepara un sistema para trabajar remotamente si no puedes acceder a tu local",
+          id: "more-info-3",
+          content: "• Comunica a tus proveedores la situación para anticipar posibles retrasos en entregas",
           type: "received",
           timestamp: new Date(),
         },
         {
-          id: "contingency-services-4",
-          content: "3️⃣ Ten un banco de baterías o generador para mantener tus equipos funcionando",
+          id: "more-info-4",
+          content: "• Si operas con gas, verifica que los balones estén bien elevados y asegurados",
           type: "received",
           timestamp: new Date(),
         },
         {
-          id: "contingency-services-5",
-          content: "4️⃣ Comunica a tus clientes por anticipado posibles retrasos o cambios en la entrega",
+          id: "more-info-5",
+          content: "• Informa a tus clientes por redes sociales sobre posibles cambios en horario o servicio",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "more-info-6",
+          content: "Te enviaré actualizaciones sobre la situación. ¿Hay algo específico que te preocupe?",
           type: "received",
           timestamp: new Date(),
         },
       ],
+      quickReplies: [
+        { label: "Estoy preocupado por...", value: "concerns" },
+        { label: "No, gracias", value: "thanks" },
+      ],
     },
     {
-      id: "contingency-plan-manufacturing",
+      id: "after-disaster",
       messages: [
         {
-          id: "contingency-manufacturing-1",
-          content: "PLAN DE CONTINGENCIA PARA MANUFACTURA:",
+          id: "after-1",
+          content: "Hola Caleb, soy Cuy. Han pasado 48 horas desde la alerta por lluvias intensas. ¿Cómo estás? ¿Tu restaurante está bien?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Todo está bien", value: "all-good" },
+        { label: "Tenemos algunos daños", value: "some-damage" },
+        { label: "Sufrimos daños graves", value: "serious-damage" },
+      ],
+    },
+    {
+      id: "damage-assessment",
+      messages: [
+        {
+          id: "damage-1",
+          content: "Lamento escuchar eso. Para poder ayudarte mejor, necesito evaluar el impacto. ¿Podrías responder algunas preguntas rápidas?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, adelante", value: "start-assessment" },
+        { label: "Ahora no puedo", value: "later" },
+      ],
+    },
+    {
+      id: "damage-questions-1",
+      messages: [
+        {
+          id: "damage-q1",
+          content: "¿Qué áreas de tu restaurante se han visto afectadas?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Cocina", value: "kitchen" },
+        { label: "Área de comensales", value: "dining-area" },
+        { label: "Almacén", value: "storage" },
+        { label: "Todo el local", value: "all" },
+      ],
+    },
+    {
+      id: "damage-questions-2",
+      messages: [
+        {
+          id: "damage-q2",
+          content: "¿Qué tipo de daños has sufrido principalmente?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Inundación", value: "flood" },
+        { label: "Daños eléctricos", value: "electrical" },
+        { label: "Daños estructurales", value: "structural" },
+        { label: "Pérdida de inventario", value: "inventory" },
+      ],
+    },
+    {
+      id: "damage-questions-3",
+      messages: [
+        {
+          id: "damage-q3",
+          content: "¿Puedes estimar cuándo podrías reabrir tu negocio?",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Ya estamos operando", value: "now" },
+        { label: "En 1-2 días", value: "soon" },
+        { label: "En 1-2 semanas", value: "week" },
+        { label: "No lo sé aún", value: "unknown" },
+      ],
+    },
+    {
+      id: "damage-recovery-plan",
+      messages: [
+        {
+          id: "recovery-plan-1",
+          content: "Gracias por compartir esta información. Basado en tu situación, he preparado algunas recomendaciones para ayudarte a recuperarte lo antes posible:",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
-          id: "contingency-manufacturing-2",
-          content: "1️⃣ Protege tu maquinaria con cubiertas impermeables y elévala si es posible",
+          id: "recovery-plan-2",
+          content: "1️⃣ Contacta a tu seguro inmediatamente y documenta todos los daños con fotos",
           type: "received",
           timestamp: new Date(),
         },
         {
-          id: "contingency-manufacturing-3",
-          content: "2️⃣ Almacena materias primas en contenedores sellados y en altura",
+          id: "recovery-plan-3",
+          content: "2️⃣ Utiliza el programa BCP Impulso Restaurantes para acceder a financiamiento rápido para reparaciones",
           type: "received",
           timestamp: new Date(),
         },
         {
-          id: "contingency-manufacturing-4",
-          content: "3️⃣ Identifica proveedores alternativos para tus insumos principales",
+          id: "recovery-plan-4",
+          content: "3️⃣ Considera implementar un menú simplificado temporal mientras recuperas toda tu capacidad",
           type: "received",
           timestamp: new Date(),
         },
         {
-          id: "contingency-manufacturing-5",
-          content: "4️⃣ Adelanta producción de productos clave si se acerca la temporada de lluvias",
+          id: "recovery-plan-5",
+          content: "4️⃣ Comunícate con los contactos de emergencia que preparamos en tu plan de contingencia",
           type: "received",
           timestamp: new Date(),
         },
+        {
+          id: "recovery-plan-6",
+          content: "¿Te gustaría que programemos una consulta gratuita con un especialista en recuperación de negocios del programa Contigo Emprendedor?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, me interesa", value: "yes-specialist" },
+        { label: "Lo pensaré", value: "maybe-later" },
+        { label: "No por ahora", value: "no-thanks" },
       ],
     },
     {
@@ -741,6 +1020,79 @@ const ChatInterface: React.FC = () => {
   const handleSendMessage = () => {
     if (!currentMessage.trim()) return;
 
+    // Si estamos esperando un PIN para verificar un desafío
+    if (verifyingPin) {
+      const enteredPin = currentMessage.trim();
+      
+      const newMessage: ChatMessageProps = {
+        id: `user-${Date.now()}`,
+        content: enteredPin,
+        type: "sent",
+        timestamp: new Date(),
+        isPin: true,
+      };
+
+      setSections(prev => {
+        const updated = [...prev];
+        if (updated.length > 0) {
+          updated[updated.length - 1] = {
+            ...updated[updated.length - 1],
+            messages: [...updated[updated.length - 1].messages, newMessage],
+          };
+        }
+        return updated;
+      });
+
+      setCurrentMessage("");
+      
+      // Verificar el PIN
+      if (enteredPin === expectedPin) {
+        // PIN correcto
+        setVerifyingPin(false);
+        setTimeout(() => {
+          setCurrentSectionIndex(27); // Índice de challenge-completed
+        }, 500);
+      } else {
+        // PIN incorrecto
+        setVerifyingPin(false);
+        setTimeout(() => {
+          setCurrentSectionIndex(26); // Índice de incorrect-pin
+        }, 500);
+      }
+      return;
+    }
+
+    // Si estamos esperando la confirmación de "Estoy listo"
+    if (waitingForReadyConfirmation && currentMessage.toLowerCase().includes("listo")) {
+      const newMessage: ChatMessageProps = {
+        id: `user-${Date.now()}`,
+        content: currentMessage,
+        type: "sent",
+        timestamp: new Date(),
+      };
+
+      setSections(prev => {
+        const updated = [...prev];
+        if (updated.length > 0) {
+          updated[updated.length - 1] = {
+            ...updated[updated.length - 1],
+            messages: [...updated[updated.length - 1].messages, newMessage],
+          };
+        }
+        return updated;
+      });
+
+      setCurrentMessage("");
+      setWaitingForReadyConfirmation(false);
+      
+      // Continuar con el flujo
+      setTimeout(() => {
+        setCurrentSectionIndex(8); // Índice de staff-info
+      }, 500);
+      return;
+    }
+    
+    // Mensaje normal
     const newMessage: ChatMessageProps = {
       id: `user-${Date.now()}`,
       content: currentMessage,
@@ -768,10 +1120,13 @@ const ChatInterface: React.FC = () => {
 
     setCurrentMessage("");
     
-    // Avanzar a la siguiente sección
-    setTimeout(() => {
-      setCurrentSectionIndex(prev => prev + 1);
-    }, 500);
+    // Avanzar a la siguiente sección si estamos en damage assessment
+    if (damageAssessment) {
+      setTimeout(() => {
+        setCurrentSectionIndex(prev => prev + 1);
+      }, 500);
+      return;
+    }
   };
 
   const handleQuickReply = (value: string) => {
@@ -822,38 +1177,158 @@ const ChatInterface: React.FC = () => {
 
       // Manejar el tipo de negocio en caso de información incorrecta
       if (currentSectionIndex === 1 && !correctInfo) {
-        setBusinessType(quickReplyOption.label);
+        if (value === "retail") setBusinessType("Tienda / Bodega");
+        else if (value === "restaurant") setBusinessType("Restaurante");
+        else if (value === "services") setBusinessType("Servicios");
+        else if (value === "manufacturing") setBusinessType("Manufactura");
+        else setBusinessType("Otro");
+        
+        setTimeout(() => {
+          setCurrentSectionIndex(2); // Ir a preguntar por la ubicación
+        }, 500);
+        return;
       }
 
       // Manejar la ubicación del negocio en caso de información incorrecta
       if (currentSectionIndex === 2 && !correctInfo) {
-        setBusinessLocation(quickReplyOption.label);
+        if (value === "lima-center") setBusinessLocation("Lima Centro");
+        else if (value === "lima-north") setBusinessLocation("Lima Norte");
+        else if (value === "lima-south") setBusinessLocation("Lima Sur");
+        else if (value === "lima-east") setBusinessLocation("Lima Este");
+        else if (value === "callao") setBusinessLocation("Callao");
+        else setBusinessLocation("Otra región");
+        
+        setTimeout(() => {
+          setCurrentSectionIndex(3); // Ir a la historia de éxito
+        }, 500);
+        return;
       }
 
-      // Lógica especial para el plan de contingencia según el tipo de negocio
-      if (currentSectionIndex === 20 && value === "yes-advice") {
-        // Ajustar el índice de la siguiente sección basado en el tipo de negocio
-        if (businessType === "Tienda / Bodega") {
+      // Manejar la explicación del plan
+      if (currentSectionIndex === 4) {
+        if (value === "more-info") {
           setTimeout(() => {
-            setCurrentSectionIndex(21); // índice de contingency-plan-retail
+            setCurrentSectionIndex(5); // Ir a la explicación del plan
           }, 500);
           return;
-        } else if (businessType === "Restaurante") {
+        } else if (value === "later") {
+          setWaitingForReadyConfirmation(true);
           setTimeout(() => {
-            setCurrentSectionIndex(22); // índice de contingency-plan-restaurant
-          }, 500);
-          return;
-        } else if (businessType === "Servicios") {
-          setTimeout(() => {
-            setCurrentSectionIndex(23); // índice de contingency-plan-services
-          }, 500);
-          return;
-        } else if (businessType === "Manufactura") {
-          setTimeout(() => {
-            setCurrentSectionIndex(24); // índice de contingency-plan-manufacturing
+            setCurrentSectionIndex(6); // Esperar a que esté listo
           }, 500);
           return;
         }
+      }
+
+      // Después de la explicación del plan
+      if (currentSectionIndex === 5) {
+        if (value === "later") {
+          setWaitingForReadyConfirmation(true);
+          setTimeout(() => {
+            setCurrentSectionIndex(6); // Esperar a que esté listo
+          }, 500);
+          return;
+        }
+      }
+
+      // Para los desafíos
+      if (currentSectionIndex === 17) {
+        if (value === "start-first") {
+          // Generar un PIN aleatorio de 6 dígitos
+          const pin = Math.floor(100000 + Math.random() * 900000).toString();
+          setExpectedPin(pin);
+          setCurrentChallenge("restaurant-inventory"); // El ID del primer desafío
+          
+          setTimeout(() => {
+            setCurrentSectionIndex(23); // Ir a start-challenge
+          }, 500);
+          return;
+        } else if (value === "how-to") {
+          setTimeout(() => {
+            setCurrentSectionIndex(18); // Ir a la explicación de cómo completar los desafíos
+          }, 500);
+          return;
+        } else if (value === "later") {
+          setWaitingForReadyConfirmation(true);
+          setTimeout(() => {
+            setCurrentSectionIndex(6); // Esperar a que esté listo
+          }, 500);
+          return;
+        }
+      }
+
+      // Desde la explicación de cómo completar desafíos
+      if (currentSectionIndex === 18) {
+        if (value === "start-first") {
+          // Generar un PIN aleatorio de 6 dígitos
+          const pin = Math.floor(100000 + Math.random() * 900000).toString();
+          setExpectedPin(pin);
+          setCurrentChallenge("restaurant-inventory"); // El ID del primer desafío
+          
+          setTimeout(() => {
+            setCurrentSectionIndex(23); // Ir a start-challenge
+          }, 500);
+          return;
+        } else if (value === "later") {
+          setWaitingForReadyConfirmation(true);
+          setTimeout(() => {
+            setCurrentSectionIndex(6); // Esperar a que esté listo
+          }, 500);
+          return;
+        }
+      }
+
+      // Después de mostrar el enlace del desafío
+      if (currentSectionIndex === 23) {
+        // Aquí simulamos que el usuario ha visitado el enlace y ahora debe verificar
+        setVerifyingPin(true);
+        setTimeout(() => {
+          setCurrentSectionIndex(24); // Ir a verify-challenge
+        }, 500);
+        return;
+      }
+
+      // Después de incorrecto PIN
+      if (currentSectionIndex === 26) {
+        setVerifyingPin(true);
+        setTimeout(() => {
+          setCurrentSectionIndex(24); // Volver a verify-challenge
+        }, 500);
+        return;
+      }
+
+      // Lógica especial para el plan de contingencia según el tipo de negocio
+      if (currentSectionIndex === 28 && value === "yes-advice") {
+        // Para este demo, siempre vamos al plan de restaurante
+        setTimeout(() => {
+          setCurrentSectionIndex(29); // índice de contingency-plan-restaurant
+        }, 500);
+        return;
+      }
+
+      // Más información sobre el plan de contingencia
+      if (currentSectionIndex === 29 && value === "more-info") {
+        setTimeout(() => {
+          setCurrentSectionIndex(30); // índice de more-contingency-info
+        }, 500);
+        return;
+      }
+
+      // Después del desastre
+      if (currentSectionIndex === 31 && (value === "some-damage" || value === "serious-damage")) {
+        setDamageAssessment(true);
+        setTimeout(() => {
+          setCurrentSectionIndex(32); // índice de damage-assessment
+        }, 500);
+        return;
+      }
+
+      // Comenzar evaluación de daños
+      if (currentSectionIndex === 32 && value === "start-assessment") {
+        setTimeout(() => {
+          setCurrentSectionIndex(33); // Primera pregunta de daños
+        }, 500);
+        return;
       }
 
       // Avanzar a la siguiente sección (comportamiento normal)
@@ -863,14 +1338,39 @@ const ChatInterface: React.FC = () => {
     }
   };
 
+  const handleSelectChallenge = (challengeId: string) => {
+    // Generar un PIN aleatorio de 6 dígitos
+    const pin = Math.floor(100000 + Math.random() * 900000).toString();
+    setExpectedPin(pin);
+    setCurrentChallenge(challengeId);
+    
+    setTimeout(() => {
+      setCurrentSectionIndex(23); // Ir a start-challenge
+    }, 500);
+  };
+
+  const renderChallenges = (challenges: Challenge[]) => {
+    // Filtrar desafíos específicos para el tipo de negocio actual o los generales
+    const filteredChallenges = challenges.filter(
+      challenge => challenge.businessType === businessType || challenge.businessType === "general"
+    );
+
+    return (
+      <div className="space-y-4">
+        {filteredChallenges.map((challenge) => (
+          <ChallengeCard
+            key={challenge.id}
+            challenge={challenge}
+            onClick={handleSelectChallenge}
+          />
+        ))}
+      </div>
+    );
+  };
+
   const handleSelectCourse = (courseId: string) => {
     // En una app real, esto navegaría a los detalles del curso
     console.log("Curso seleccionado:", courseId);
-  };
-
-  const handleSelectChallenge = (challengeId: string) => {
-    // En una app real, esto mostraría los detalles del desafío
-    console.log("Desafío seleccionado:", challengeId);
   };
 
   const renderComponent = (component: string, props: any) => {
@@ -909,6 +1409,9 @@ const ChatInterface: React.FC = () => {
           className="my-2"
         />;
       
+      case "challenges":
+        return props && renderChallenges(props);
+      
       case "roadmap":
         return props && <CoursesRoadmap 
           courses={props} 
@@ -942,6 +1445,37 @@ const ChatInterface: React.FC = () => {
     }
   };
 
+  const renderChallengeLink = (challengeId: string) => {
+    // En una app real, esto sería un enlace a la página del desafío
+    const fakeUrl = `https://app.contigoemprendedor.pe/desafios/${challengeId}`;
+    
+    return (
+      <div className="bg-white rounded-lg p-4 my-2 shadow-sm border-l-4 border-whatsapp-green">
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="font-medium text-gray-800">Enlace al desafío</h4>
+            <p className="text-sm text-gray-600">PIN de verificación: {expectedPin}</p>
+          </div>
+          <ExternalLink className="text-whatsapp-green w-5 h-5" />
+        </div>
+        <a 
+          href="#" 
+          className="block mt-2 text-whatsapp-green font-medium text-sm"
+          onClick={(e) => {
+            e.preventDefault();
+            // Simulamos que el usuario completa el desafío
+            setTimeout(() => {
+              setVerifyingPin(true);
+              setCurrentSectionIndex(24); // Ir a verify-challenge
+            }, 1000);
+          }}
+        >
+          {fakeUrl}
+        </a>
+      </div>
+    );
+  };
+
   if (!started) {
     return <WelcomeScreen onStart={() => setStarted(true)} />;
   }
@@ -949,7 +1483,7 @@ const ChatInterface: React.FC = () => {
   return (
     <div className="flex flex-col h-full bg-whatsapp-bg">
       {/* Header */}
-      <div className="bg-whatsapp-header text-white px-4 py-3 flex items-center justify-between shadow-md">
+      <div className="bg-whatsapp-green text-white px-4 py-3 flex items-center justify-between shadow-md">
         <div className="flex items-center">
           <ArrowLeft className="w-5 h-5 mr-3" />
           <CuyAvatar />
@@ -974,7 +1508,7 @@ const ChatInterface: React.FC = () => {
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 whatsapp-chat">
+      <div className="flex-1 overflow-y-auto p-4 bg-chat-pattern">
         {sections.map((section, sectionIndex) => (
           <div key={section.id} className="mb-4">
             {section.messages.map((message) => (
@@ -989,8 +1523,19 @@ const ChatInterface: React.FC = () => {
               renderComponent(section.component, section.challenge)
             )}
             
+            {section.component === "challenges" && section.challenges && (
+              renderComponent(section.component, section.challenges)
+            )}
+            
             {section.component === "roadmap" && section.courses && (
               renderComponent(section.component, section.courses)
+            )}
+
+            {/* Mostrar enlace de desafío */}
+            {sectionIndex === sections.length - 1 && 
+             currentSectionIndex === 23 && 
+             currentChallenge && (
+              renderChallengeLink(currentChallenge)
             )}
 
             {section.quickReplies && (
@@ -1017,8 +1562,8 @@ const ChatInterface: React.FC = () => {
       </div>
 
       {/* Input Area */}
-      <div className="bg-whatsapp-input-bg p-2 px-4 flex items-center border-t border-gray-300">
-        <button className="text-gray-600 mr-2">
+      <div className="bg-gray-100 p-2 px-4 flex items-center border-t border-gray-200">
+        <button className="text-gray-500 mr-2">
           <Paperclip className="w-5 h-5" />
         </button>
         
@@ -1026,7 +1571,13 @@ const ChatInterface: React.FC = () => {
           type="text"
           value={currentMessage}
           onChange={(e) => setCurrentMessage(e.target.value)}
-          placeholder={userName ? `Escribe un mensaje, ${userName}...` : "Escribe un mensaje..."}
+          placeholder={
+            verifyingPin 
+              ? "Ingresa el PIN del desafío..." 
+              : waitingForReadyConfirmation 
+                ? "Escribe 'Estoy listo' cuando quieras continuar..." 
+                : `Escribe un mensaje, ${userName}...`
+          }
           className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:border-whatsapp-green bg-white text-gray-800"
           onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
         />
@@ -1039,7 +1590,7 @@ const ChatInterface: React.FC = () => {
             <Send className="w-5 h-5" />
           </button>
         ) : (
-          <button className="ml-2 text-gray-600">
+          <button className="ml-2 text-gray-500">
             <Mic className="w-5 h-5" />
           </button>
         )}
