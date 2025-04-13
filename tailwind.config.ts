@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -73,10 +72,11 @@ export default {
 				},
 				// WhatsApp colors
 				whatsapp: {
+					'background': '#E5DDD5',
+					'bubble-sent': '#DCF8C6',
+					'bubble-received': '#FFFFFF',
+					'input-bg': '#F0F0F0',
 					'green': '#25D366',
-					'light-green': '#DCF8C6',
-					'bg': '#E5DDD5',
-					'blue': '#34B7F1',
 				}
 			},
 			backgroundImage: {

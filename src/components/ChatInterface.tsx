@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import ChatMessage, { ChatMessageProps } from "./ChatMessage";
@@ -76,623 +75,8 @@ const ChatInterface: React.FC = () => {
   const [riskLevel, setRiskLevel] = useState<"low" | "medium" | "high">("medium");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  // Conversación ampliada con los nuevos flujos
   const conversationFlow: ConversationSection[] = [
-    {
-      id: "intro",
-      messages: [
-        {
-          id: "intro-1",
-          content: "¡Hola! Soy Cuy, el asistente virtual de Contigo Emprendedor BCP 👋",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "intro-2",
-          content: "Estoy aquí para ayudarte a crear un plan de contingencia para tu negocio y así estar preparado ante cualquier emergencia o desastre que pueda afectar tu emprendimiento.",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "intro-3",
-          content: "Si deseas conocer más sobre la iniciativa Contigo Emprendedor o nuestro Mercado Solidario BCP, puedes visitar: https://www.viabcp.com/contigoemprendedor",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "intro-4",
-          content: "Para comenzar, me gustaría conocerte. ¿Cuál es tu nombre?",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-    },
-    {
-      id: "type-business",
-      messages: [
-        {
-          id: "type-1",
-          content: "¡Qué buenazo conocerte! ¿A qué tipo de negocio te dedicas?",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      quickReplies: [
-        { label: "Tienda / Bodega", value: "retail" },
-        { label: "Restaurante", value: "restaurant" },
-        { label: "Servicios", value: "services" },
-        { label: "Manufactura", value: "manufacturing" },
-        { label: "Otro", value: "other" },
-      ],
-    },
-    {
-      id: "business-location",
-      messages: [
-        {
-          id: "location-1",
-          content: "Gracias por la información. ¿En qué distrito está ubicado tu negocio?",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      quickReplies: [
-        { label: "Lima Centro", value: "lima-center" },
-        { label: "Lima Norte", value: "lima-north" },
-        { label: "Lima Sur", value: "lima-south" },
-        { label: "Lima Este", value: "lima-east" },
-        { label: "Callao", value: "callao" },
-        { label: "Otra región", value: "other-region" },
-      ],
-    },
-    {
-      id: "success-story",
-      messages: [
-        {
-          id: "story-1",
-          content: "¡Perfecto! Antes de comenzar, me gustaría compartir contigo la historia de Carmen, una emprendedora como tú.",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      component: "testimonial",
-      componentProps: {
-        name: "Carmen Rodríguez",
-        business: "Restaurante 'El Buen Sabor'",
-        location: "Villa El Salvador",
-        quote: "Gracias al plan de contingencia que armé con Cuy, pude recuperar mi negocio en solo 2 semanas después de las inundaciones. ¡Ahora tengo todo respaldado y mi negocio está más seguro que nunca!",
-        imageSrc: "https://randomuser.me/api/portraits/women/42.jpg"
-      },
-    },
-    {
-      id: "awareness",
-      messages: [
-        {
-          id: "awareness-1",
-          content: "¿Sabías que el 40% de los negocios no logra recuperarse tras un desastre natural? 😱",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "awareness-2",
-          content: "¡Pero no te preocupes! Estoy aquí para ayudarte a preparar tu negocio y hacerlo más resistente 💪",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "awareness-3",
-          content: "¿Te animas a crear tu plan de contingencia?",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-      quickReplies: [
-        { label: "¡Claro que sí! 🚀", value: "ready" },
-        { label: "¿En qué consiste?", value: "more-info" },
-        { label: "Ahora no puedo", value: "later" },
-      ],
-    },
-    {
-      id: "staff-info",
-      messages: [
-        {
-          id: "staff-1",
-          content: "Genial, vamos a entender mejor tu negocio. ¿Tienes trabajadores o gestionas todo tú solo?",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      quickReplies: [
-        { label: "Solo yo", value: "solo" },
-        { label: "1-3 trabajadores", value: "small-team" },
-        { label: "4-10 trabajadores", value: "medium-team" },
-        { label: "Más de 10", value: "large-team" },
-      ],
-    },
-    {
-      id: "insurance-info",
-      messages: [
-        {
-          id: "insurance-1",
-          content: "¿Cuentas con algún seguro o respaldo financiero para tu negocio?",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      quickReplies: [
-        { label: "Sí, tengo seguro", value: "has-insurance" },
-        { label: "Solo ahorros", value: "savings-only" },
-        { label: "No tengo respaldo", value: "no-backup" },
-        { label: "No estoy seguro", value: "not-sure" },
-      ],
-    },
-    {
-      id: "risk-assessment",
-      messages: [
-        {
-          id: "risk-1",
-          content: "Gracias por la información. Ahora me gustaría hacerte algunas preguntas rápidas para evaluar cómo está preparado tu negocio ante emergencias.",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "risk-2",
-          content: "¿Tienes un plan de emergencia para tu negocio?",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-      quickReplies: [
-        { label: "Sí, completo", value: "yes-full" },
-        { label: "Sí, parcial", value: "yes-partial" },
-        { label: "No, pero lo estoy pensando", value: "no-planning" },
-        { label: "No lo considero necesario", value: "no" },
-      ],
-    },
-    {
-      id: "digital-tools",
-      messages: [
-        {
-          id: "digital-1",
-          content: "¿Usas herramientas digitales para gestionar tu inventario o ventas?",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      quickReplies: [
-        { label: "Sí, todo digitalizado", value: "yes-full" },
-        { label: "Parcialmente", value: "yes-partial" },
-        { label: "No, uso papel", value: "no" },
-      ],
-    },
-    {
-      id: "emergency-contacts",
-      messages: [
-        {
-          id: "emergency-1",
-          content: "¿Tienes una lista actualizada de contactos de emergencia (proveedores clave, servicios de emergencia, etc.)?",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      quickReplies: [
-        { label: "Sí, completa", value: "yes-full" },
-        { label: "Algunos contactos", value: "partial" },
-        { label: "No tengo lista", value: "no" },
-      ],
-    },
-    {
-      id: "evaluation-results",
-      messages: [
-        {
-          id: "eval-1",
-          content: "¡Gracias por tus respuestas! Basado en ellas, he preparado un diagnóstico rápido de tu preparación ante emergencias.",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "eval-2",
-          content: "Tu nivel de riesgo actual es:",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-      component: "risk",
-      componentProps: {
-        level: "medium",
-        message: "Riesgo medio. ¡Aún estás a tiempo de mejorar tu plan!",
-      },
-    },
-    {
-      id: "progress-indicator",
-      messages: [
-        {
-          id: "progress-1",
-          content: "Tu nivel de preparación actual es:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      component: "progress",
-      componentProps: {
-        progress: 35,
-        level: "Iniciando",
-        nextLevel: "Preparado",
-      },
-    },
-    {
-      id: "first-challenge",
-      messages: [
-        {
-          id: "challenge-1",
-          content: "Para ayudarte a mejorar tu preparación, te propongo un desafío simple pero importante:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      component: "challenge",
-      challenge: {
-        id: "challenge-inventory",
-        title: "Crear inventario digital básico",
-        description: "Registra tus 10 productos/servicios principales con foto, precio y cantidad disponible.",
-        status: "not-started",
-        reward: 25,
-        dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        priority: "medium",
-      },
-    },
-    {
-      id: "second-challenge",
-      messages: [
-        {
-          id: "second-challenge-1",
-          content: "También te recomiendo este importante reto:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: false,
-        },
-      ],
-      component: "challenge",
-      challenge: {
-        id: "emergency-contacts",
-        title: "Lista de contactos de emergencia",
-        description: "Registra 5 contactos clave: proveedor principal, servicio técnico, emergencias médicas, bomberos y un contacto alternativo.",
-        status: "not-started",
-        reward: 15,
-        dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-        priority: "high",
-      },
-    },
-    {
-      id: "third-challenge",
-      messages: [
-        {
-          id: "third-challenge-1",
-          content: "Y finalmente, para complementar tu plan básico:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: false,
-        },
-      ],
-      component: "challenge",
-      challenge: {
-        id: "emergency-kit",
-        title: "Armar mochila de emergencia",
-        description: "Prepara una mochila con linterna, botiquín básico, agua, radio a pilas y documentos importantes.",
-        status: "not-started",
-        reward: 20,
-        dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
-        priority: "medium",
-      },
-    },
-    {
-      id: "accept-challenge",
-      messages: [
-        {
-          id: "accept-1",
-          content: "¿Te animas a completar estos desafíos? Recuerda que ganarás Monedas Cuy por cada uno que completes.",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      quickReplies: [
-        { label: "¡Claro que sí! 💪", value: "accept" },
-        { label: "¿Cómo lo hago?", value: "how-to" },
-        { label: "Ahora no puedo", value: "later" },
-      ],
-    },
-    {
-      id: "challenge-accepted",
-      messages: [
-        {
-          id: "accepted-1",
-          content: "¡Excelente decisión! Cuando completes estos desafíos, ganarás Monedas Cuy que podrás usar para desbloquear cursos y recursos exclusivos.",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "accepted-2",
-          content: "Te enviaré recordatorios amigables para ayudarte a completarlos. ¿Puedo mostrarte qué podrás hacer con tus Monedas Cuy?",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-      quickReplies: [
-        { label: "Sí, muéstrame", value: "show-roadmap" },
-        { label: "Después", value: "later" },
-      ],
-    },
-    {
-      id: "show-roadmap",
-      messages: [
-        {
-          id: "roadmap-1",
-          content: "¡Perfecto! Este es tu camino de aprendizaje. Podrás desbloquear cursos con las Monedas Cuy que vas ganando:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      component: "roadmap",
-      courses: [
-        {
-          id: "course-1",
-          title: "Inventario Digital",
-          description: "Aprende a digitalizar tu inventario de forma sencilla",
-          status: "available",
-          progress: 0,
-        },
-        {
-          id: "course-2",
-          title: "Plan de Crisis",
-          description: "Crea tu plan de acción ante emergencias",
-          status: "locked",
-          unlockCost: 25,
-        },
-        {
-          id: "course-3",
-          title: "Contactos de Emergencia",
-          description: "Organiza tus contactos clave para momentos críticos",
-          status: "locked",
-          unlockCost: 15,
-        },
-        {
-          id: "course-4",
-          title: "Ventas en Emergencias",
-          description: "Estrategias para mantener ventas en crisis",
-          status: "locked",
-          unlockCost: 50,
-        },
-      ],
-    },
-    {
-      id: "challenge-completed",
-      messages: [
-        {
-          id: "completed-1",
-          content: "¡FELICITACIONES! 🎉 Has completado tu primer desafío.",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-          hasEmoji: true,
-        },
-        {
-          id: "completed-2",
-          content: "Has ganado:",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-      component: "reward",
-      componentProps: {
-        coins: 25,
-        achievement: "¡Primer desafío completado!",
-      },
-    },
-    {
-      id: "weather-alert",
-      messages: [
-        {
-          id: "weather-1",
-          content: "🚨 ALERTA: Se pronostica lluvia intensa en tu zona para esta semana. Te recomiendo revisar tu inventario y protegerlo adecuadamente.",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "weather-2",
-          content: "¿Necesitas consejos sobre cómo proteger tu negocio?",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-      quickReplies: [
-        { label: "Sí, por favor", value: "yes-advice" },
-        { label: "Ya estoy preparado", value: "already-prepared" },
-        { label: "No aplica a mi negocio", value: "not-applicable" },
-      ],
-    },
-    {
-      id: "contingency-plan-retail",
-      messages: [
-        {
-          id: "contingency-retail-1",
-          content: "PLAN DE CONTINGENCIA PARA TIENDA/BODEGA:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "contingency-retail-2",
-          content: "1️⃣ Eleva tus productos al menos 30cm del suelo usando estantes o pallets",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-retail-3",
-          content: "2️⃣ Protege con plástico impermeable los productos sensibles al agua",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-retail-4",
-          content: "3️⃣ Asegura tu sistema de cobro y respaldo digital en un lugar alto y seco",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-retail-5",
-          content: "4️⃣ Ten a la mano el contacto de tus proveedores principales para reponer inventario rápidamente",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-    },
-    {
-      id: "contingency-plan-restaurant",
-      messages: [
-        {
-          id: "contingency-restaurant-1",
-          content: "PLAN DE CONTINGENCIA PARA RESTAURANTE:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "contingency-restaurant-2",
-          content: "1️⃣ Almacena los alimentos perecibles en contenedores herméticos y elevados",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-restaurant-3",
-          content: "2️⃣ Verifica las instalaciones eléctricas y protege equipos de cocina",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-restaurant-4",
-          content: "3️⃣ Prepara un menú alternativo que requiera menos ingredientes frescos",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-restaurant-5",
-          content: "4️⃣ Asegura un sistema alternativo para calentar alimentos en caso de corte eléctrico",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-    },
-    {
-      id: "contingency-plan-services",
-      messages: [
-        {
-          id: "contingency-services-1",
-          content: "PLAN DE CONTINGENCIA PARA SERVICIOS:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "contingency-services-2",
-          content: "1️⃣ Respalda todos tus archivos y documentos digitales en la nube",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-services-3",
-          content: "2️⃣ Prepara un sistema para trabajar remotamente si no puedes acceder a tu local",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-services-4",
-          content: "3️⃣ Ten un banco de baterías o generador para mantener tus equipos funcionando",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-services-5",
-          content: "4️⃣ Comunica a tus clientes por anticipado posibles retrasos o cambios en la entrega",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-    },
-    {
-      id: "contingency-plan-manufacturing",
-      messages: [
-        {
-          id: "contingency-manufacturing-1",
-          content: "PLAN DE CONTINGENCIA PARA MANUFACTURA:",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "contingency-manufacturing-2",
-          content: "1️⃣ Protege tu maquinaria con cubiertas impermeables y elévala si es posible",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-manufacturing-3",
-          content: "2️⃣ Almacena materias primas en contenedores sellados y en altura",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-manufacturing-4",
-          content: "3️⃣ Identifica proveedores alternativos para tus insumos principales",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "contingency-manufacturing-5",
-          content: "4️⃣ Adelanta producción de productos clave si se acerca la temporada de lluvias",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-    },
-    {
-      id: "next-steps",
-      messages: [
-        {
-          id: "next-1",
-          content: "Ahora puedes usar tus Monedas Cuy para desbloquear el curso 'Plan de Crisis' o seguir con más desafíos para ganar más monedas.",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "next-2",
-          content: "¿Qué te gustaría hacer a continuación?",
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-      quickReplies: [
-        { label: "Desbloquear curso", value: "unlock-course" },
-        { label: "Más desafíos", value: "more-challenges" },
-        { label: "Ver mi progreso", value: "view-progress" },
-      ],
-    },
+    // ... keep existing conversation flow
   ];
 
   useEffect(() => {
@@ -709,20 +93,17 @@ const ChatInterface: React.FC = () => {
     const currentSection = conversationFlow[currentSectionIndex];
     setLoading(true);
     
-    // Simulate typing time
     setTimeout(() => {
       setSections(prev => [...prev, currentSection]);
       setLoading(false);
       scrollToBottom();
       
-      // Si esta sección da una recompensa, actualizar monedas
       if (currentSection.component === "reward" && currentSection.componentProps?.coins) {
         setCuyCoins(prev => prev + currentSection.componentProps.coins);
         setShowReward(true);
         setTimeout(() => setShowReward(false), 3000);
       }
 
-      // Si esta sección establece el nivel de riesgo
       if (currentSection.component === "risk" && currentSection.componentProps?.level) {
         setRiskLevel(currentSection.componentProps.level);
       }
@@ -744,7 +125,6 @@ const ChatInterface: React.FC = () => {
     };
 
     setSections(prev => {
-      // Añadir este mensaje a la sección actual
       const updated = [...prev];
       if (updated.length > 0) {
         updated[updated.length - 1] = {
@@ -752,7 +132,6 @@ const ChatInterface: React.FC = () => {
           messages: [...updated[updated.length - 1].messages, newMessage],
         };
       } else {
-        // Si no hay secciones aún, crear una
         updated.push({
           id: "user-input",
           messages: [newMessage],
@@ -763,19 +142,16 @@ const ChatInterface: React.FC = () => {
 
     setCurrentMessage("");
     
-    // Manejo especial para la sección de nombre de usuario
     if (currentSectionIndex === 0) {
       setUserName(currentMessage);
     }
     
-    // Avanzar a la siguiente sección
     setTimeout(() => {
       setCurrentSectionIndex(prev => prev + 1);
     }, 500);
   };
 
   const handleQuickReply = (value: string) => {
-    // Crear un mensaje a partir de la respuesta rápida seleccionada
     const quickReplyOption = sections[sections.length - 1].quickReplies?.find(
       option => option.value === value
     );
@@ -789,55 +165,49 @@ const ChatInterface: React.FC = () => {
       };
 
       setSections(prev => {
-        // Añadir esta respuesta rápida como un mensaje enviado
         const updated = [...prev];
         if (updated.length > 0) {
           updated[updated.length - 1] = {
             ...updated[updated.length - 1],
             messages: [...updated[updated.length - 1].messages, newMessage],
-            quickReplies: undefined, // Eliminar las respuestas rápidas después de la selección
+            quickReplies: undefined,
           };
         }
         return updated;
       });
 
-      // Capturar el tipo de negocio si estamos en esa sección
       if (currentSectionIndex === 1 && value !== "other") {
         setBusinessType(quickReplyOption.label);
       }
 
-      // Capturar la ubicación si estamos en esa sección
       if (currentSectionIndex === 2) {
         setBusinessLocation(quickReplyOption.label);
       }
 
-      // Lógica especial para el plan de contingencia según el tipo de negocio
       if (currentSectionIndex === 14 && value === "yes-advice") {
-        // Ajustar el índice de la siguiente sección basado en el tipo de negocio
         if (businessType === "Tienda / Bodega") {
           setTimeout(() => {
-            setCurrentSectionIndex(15); // índice de contingency-plan-retail
+            setCurrentSectionIndex(15);
           }, 500);
           return;
         } else if (businessType === "Restaurante") {
           setTimeout(() => {
-            setCurrentSectionIndex(16); // índice de contingency-plan-restaurant
+            setCurrentSectionIndex(16);
           }, 500);
           return;
         } else if (businessType === "Servicios") {
           setTimeout(() => {
-            setCurrentSectionIndex(17); // índice de contingency-plan-services
+            setCurrentSectionIndex(17);
           }, 500);
           return;
         } else if (businessType === "Manufactura") {
           setTimeout(() => {
-            setCurrentSectionIndex(18); // índice de contingency-plan-manufacturing
+            setCurrentSectionIndex(18);
           }, 500);
           return;
         }
       }
 
-      // Avanzar a la siguiente sección (comportamiento normal)
       setTimeout(() => {
         setCurrentSectionIndex(prev => prev + 1);
       }, 500);
@@ -845,12 +215,10 @@ const ChatInterface: React.FC = () => {
   };
 
   const handleSelectCourse = (courseId: string) => {
-    // En una app real, esto navegaría a los detalles del curso
     console.log("Curso seleccionado:", courseId);
   };
 
   const handleSelectChallenge = (challengeId: string) => {
-    // En una app real, esto mostraría los detalles del desafío
     console.log("Desafío seleccionado:", challengeId);
   };
 
@@ -928,9 +296,8 @@ const ChatInterface: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#0e1621]">
-      {/* Header */}
-      <div className="bg-[#1f2c38] text-white px-4 py-3 flex items-center justify-between shadow-md">
+    <div className="flex flex-col h-full bg-whatsapp-background">
+      <div className="bg-[#008069] text-white px-4 py-3 flex items-center justify-between shadow-md">
         <div className="flex items-center">
           <ArrowLeft className="w-5 h-5 mr-3" />
           <CuyAvatar />
@@ -954,7 +321,6 @@ const ChatInterface: React.FC = () => {
         </div>
       </div>
 
-      {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto p-4 whatsapp-chat">
         {sections.map((section, sectionIndex) => (
           <div key={section.id} className="mb-4">
@@ -997,9 +363,8 @@ const ChatInterface: React.FC = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
-      <div className="bg-[#1f2c38] p-2 px-4 flex items-center border-t border-gray-800">
-        <button className="text-gray-400 mr-2">
+      <div className="bg-[#F0F0F0] p-2 px-4 flex items-center border-t border-gray-300">
+        <button className="text-gray-600 mr-2">
           <Paperclip className="w-5 h-5" />
         </button>
         
@@ -1008,7 +373,7 @@ const ChatInterface: React.FC = () => {
           value={currentMessage}
           onChange={(e) => setCurrentMessage(e.target.value)}
           placeholder={userName ? `Escribe un mensaje, ${userName}...` : "Escribe un mensaje..."}
-          className="flex-1 border border-gray-700 rounded-full px-4 py-2 focus:outline-none focus:border-bcp-blue bg-[#323b45] text-white"
+          className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none bg-white text-black"
           onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
         />
         
@@ -1020,7 +385,7 @@ const ChatInterface: React.FC = () => {
             <Send className="w-5 h-5" />
           </button>
         ) : (
-          <button className="ml-2 text-gray-400">
+          <button className="ml-2 text-gray-600">
             <Mic className="w-5 h-5" />
           </button>
         )}
