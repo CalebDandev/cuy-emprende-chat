@@ -70,9 +70,10 @@ const ChatInterface: React.FC = () => {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [cuyCoins, setCuyCoins] = useState(0);
   const [showReward, setShowReward] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [businessType, setBusinessType] = useState("");
-  const [businessLocation, setBusinessLocation] = useState("");
+  const [userName, setUserName] = useState("Caleb"); // Default name
+  const [businessType, setBusinessType] = useState("Restaurante"); // Default business type
+  const [businessLocation, setBusinessLocation] = useState("Lima Norte"); // Default location
+  const [correctInfo, setCorrectInfo] = useState(false);
   const [riskLevel, setRiskLevel] = useState<"low" | "medium" | "high">("medium");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
@@ -83,7 +84,7 @@ const ChatInterface: React.FC = () => {
       messages: [
         {
           id: "intro-1",
-          content: "¡Hola! Soy Cuy, el asistente virtual de Contigo Emprendedor BCP 👋",
+          content: "¡Hola Caleb! Soy Cuy, el asistente virtual de Contigo Emprendedor BCP 👋",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
@@ -102,18 +103,22 @@ const ChatInterface: React.FC = () => {
         },
         {
           id: "intro-4",
-          content: "Para comenzar, me gustaría conocerte. ¿Cuál es tu nombre?",
+          content: "Según nuestros registros, tienes un Restaurante ubicado en Lima Norte. ¿Es correcta esta información?",
           type: "received",
           timestamp: new Date(),
         },
       ],
+      quickReplies: [
+        { label: "Sí, es correcto", value: "correct" },
+        { label: "No, es incorrecta", value: "incorrect" },
+      ],
     },
     {
-      id: "type-business",
+      id: "incorrect-business-info",
       messages: [
         {
-          id: "type-1",
-          content: "¡Qué buenazo conocerte! ¿A qué tipo de negocio te dedicas?",
+          id: "incorrect-1",
+          content: "Gracias por avisarme. Por favor, ¿a qué tipo de negocio te dedicas?",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
@@ -128,11 +133,11 @@ const ChatInterface: React.FC = () => {
       ],
     },
     {
-      id: "business-location",
+      id: "incorrect-business-location",
       messages: [
         {
-          id: "location-1",
-          content: "Gracias por la información. ¿En qué distrito está ubicado tu negocio?",
+          id: "incorrect-location-1",
+          content: "¿Y en qué distrito está ubicado tu negocio?",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
@@ -763,11 +768,6 @@ const ChatInterface: React.FC = () => {
 
     setCurrentMessage("");
     
-    // Manejo especial para la sección de nombre de usuario
-    if (currentSectionIndex === 0) {
-      setUserName(currentMessage);
-    }
-    
     // Avanzar a la siguiente sección
     setTimeout(() => {
       setCurrentSectionIndex(prev => prev + 1);
@@ -801,37 +801,56 @@ const ChatInterface: React.FC = () => {
         return updated;
       });
 
-      // Capturar el tipo de negocio si estamos en esa sección
-      if (currentSectionIndex === 1 && value !== "other") {
+      // Manejar la confirmación de información del negocio
+      if (currentSectionIndex === 0) {
+        if (value === "correct") {
+          setCorrectInfo(true);
+          // Si es correcta, avanzamos al paso de la historia de éxito
+          setTimeout(() => {
+            setCurrentSectionIndex(3);
+          }, 500);
+          return;
+        } else if (value === "incorrect") {
+          setCorrectInfo(false);
+          // Si es incorrecta, avanzamos al paso para corregir el tipo de negocio
+          setTimeout(() => {
+            setCurrentSectionIndex(1);
+          }, 500);
+          return;
+        }
+      }
+
+      // Manejar el tipo de negocio en caso de información incorrecta
+      if (currentSectionIndex === 1 && !correctInfo) {
         setBusinessType(quickReplyOption.label);
       }
 
-      // Capturar la ubicación si estamos en esa sección
-      if (currentSectionIndex === 2) {
+      // Manejar la ubicación del negocio en caso de información incorrecta
+      if (currentSectionIndex === 2 && !correctInfo) {
         setBusinessLocation(quickReplyOption.label);
       }
 
       // Lógica especial para el plan de contingencia según el tipo de negocio
-      if (currentSectionIndex === 14 && value === "yes-advice") {
+      if (currentSectionIndex === 20 && value === "yes-advice") {
         // Ajustar el índice de la siguiente sección basado en el tipo de negocio
         if (businessType === "Tienda / Bodega") {
           setTimeout(() => {
-            setCurrentSectionIndex(15); // índice de contingency-plan-retail
+            setCurrentSectionIndex(21); // índice de contingency-plan-retail
           }, 500);
           return;
         } else if (businessType === "Restaurante") {
           setTimeout(() => {
-            setCurrentSectionIndex(16); // índice de contingency-plan-restaurant
+            setCurrentSectionIndex(22); // índice de contingency-plan-restaurant
           }, 500);
           return;
         } else if (businessType === "Servicios") {
           setTimeout(() => {
-            setCurrentSectionIndex(17); // índice de contingency-plan-services
+            setCurrentSectionIndex(23); // índice de contingency-plan-services
           }, 500);
           return;
         } else if (businessType === "Manufactura") {
           setTimeout(() => {
-            setCurrentSectionIndex(18); // índice de contingency-plan-manufacturing
+            setCurrentSectionIndex(24); // índice de contingency-plan-manufacturing
           }, 500);
           return;
         }
@@ -858,20 +877,20 @@ const ChatInterface: React.FC = () => {
     switch (component) {
       case "progress":
         return (
-          <div className="bg-[#1f2c38] rounded-lg p-4 my-2 shadow-sm">
-            <h4 className="text-sm font-medium text-gray-200 mb-2">
+          <div className="bg-white rounded-lg p-4 my-2 shadow-sm">
+            <h4 className="text-sm font-medium text-gray-700 mb-2">
               Nivel de preparación
             </h4>
-            <div className="w-full h-3 bg-gray-700 rounded-full">
+            <div className="w-full h-3 bg-gray-200 rounded-full">
               <div 
-                className="h-full bg-bcp-blue rounded-full transition-all duration-1000"
+                className="h-full bg-whatsapp-green rounded-full transition-all duration-1000"
                 style={{ width: `${props.progress}%` }}
               ></div>
             </div>
             <div className="flex justify-between mt-1">
-              <span className="text-xs text-gray-400">{props.level}</span>
-              <span className="text-xs font-medium text-gray-300">{props.progress}%</span>
-              <span className="text-xs text-gray-400">→ {props.nextLevel}</span>
+              <span className="text-xs text-gray-500">{props.level}</span>
+              <span className="text-xs font-medium text-gray-700">{props.progress}%</span>
+              <span className="text-xs text-gray-500">→ {props.nextLevel}</span>
             </div>
           </div>
         );
@@ -899,7 +918,7 @@ const ChatInterface: React.FC = () => {
       
       case "reward":
         return (
-          <div className="bg-gradient-to-br from-bcp-orange to-yellow-500 rounded-lg p-4 my-2 text-white text-center">
+          <div className="bg-gradient-to-br from-whatsapp-green to-green-400 rounded-lg p-4 my-2 text-white text-center">
             <h4 className="font-medium mb-3">{props.achievement}</h4>
             <div className="inline-flex items-center justify-center bg-white rounded-full px-4 py-2 shadow-lg">
               <CuyCoins count={props.coins} showAnimation size="lg" />
@@ -928,9 +947,9 @@ const ChatInterface: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#0e1621]">
+    <div className="flex flex-col h-full bg-whatsapp-bg">
       {/* Header */}
-      <div className="bg-[#1f2c38] text-white px-4 py-3 flex items-center justify-between shadow-md">
+      <div className="bg-whatsapp-header text-white px-4 py-3 flex items-center justify-between shadow-md">
         <div className="flex items-center">
           <ArrowLeft className="w-5 h-5 mr-3" />
           <CuyAvatar />
@@ -998,8 +1017,8 @@ const ChatInterface: React.FC = () => {
       </div>
 
       {/* Input Area */}
-      <div className="bg-[#1f2c38] p-2 px-4 flex items-center border-t border-gray-800">
-        <button className="text-gray-400 mr-2">
+      <div className="bg-whatsapp-input-bg p-2 px-4 flex items-center border-t border-gray-300">
+        <button className="text-gray-600 mr-2">
           <Paperclip className="w-5 h-5" />
         </button>
         
@@ -1008,19 +1027,19 @@ const ChatInterface: React.FC = () => {
           value={currentMessage}
           onChange={(e) => setCurrentMessage(e.target.value)}
           placeholder={userName ? `Escribe un mensaje, ${userName}...` : "Escribe un mensaje..."}
-          className="flex-1 border border-gray-700 rounded-full px-4 py-2 focus:outline-none focus:border-bcp-blue bg-[#323b45] text-white"
+          className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:border-whatsapp-green bg-white text-gray-800"
           onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
         />
         
         {currentMessage ? (
           <button
-            className="ml-2 bg-[#00a884] rounded-full p-2 text-white"
+            className="ml-2 bg-whatsapp-green rounded-full p-2 text-white"
             onClick={handleSendMessage}
           >
             <Send className="w-5 h-5" />
           </button>
         ) : (
-          <button className="ml-2 text-gray-400">
+          <button className="ml-2 text-gray-600">
             <Mic className="w-5 h-5" />
           </button>
         )}

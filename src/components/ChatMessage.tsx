@@ -46,7 +46,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
 
       <div
         className={cn(
-          "chat-bubble text-white", // Added text-white here
+          "chat-bubble",
           type === "received" ? "chat-bubble-received" : "chat-bubble-sent",
           isTyping && "min-w-[4rem]"
         )}
