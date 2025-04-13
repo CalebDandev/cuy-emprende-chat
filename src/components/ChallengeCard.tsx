@@ -12,6 +12,7 @@ export interface Challenge {
   reward: number;
   dueDate?: Date;
   priority: "high" | "medium" | "low";
+  businessType: string; // Added businessType property
 }
 
 interface ChallengeCardProps {
