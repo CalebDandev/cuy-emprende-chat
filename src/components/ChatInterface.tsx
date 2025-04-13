@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import ChatMessage, { ChatMessageProps } from "./ChatMessage";
@@ -83,7 +82,6 @@ const ChatInterface: React.FC = () => {
   const [damageAssessment, setDamageAssessment] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  // Conversation flow
   const conversationFlow: ConversationSection[] = [
     {
       id: "intro",
@@ -177,6 +175,10 @@ const ChatInterface: React.FC = () => {
         quote: "Gracias al plan de contingencia que armé con Cuy, pude recuperar mi negocio en solo 2 semanas después de las inundaciones. ¡Ahora tengo todo respaldado y mi negocio está más seguro que nunca!",
         imageSrc: "https://randomuser.me/api/portraits/women/42.jpg"
       },
+      quickReplies: [
+        { label: "¡Interesante historia!", value: "interesting" },
+        { label: "Continuar", value: "continue" },
+      ],
     },
     {
       id: "awareness",
@@ -1130,7 +1132,7 @@ const ChatInterface: React.FC = () => {
   };
 
   const handleQuickReply = (value: string) => {
-    // Crear un mensaje a partir de la respuesta rápida seleccionada
+    // Create a message from the selected quick reply option
     const quickReplyOption = sections[sections.length - 1].quickReplies?.find(
       option => option.value === value
     );
@@ -1144,30 +1146,30 @@ const ChatInterface: React.FC = () => {
       };
 
       setSections(prev => {
-        // Añadir esta respuesta rápida como un mensaje enviado
+        // Add this quick reply as a sent message
         const updated = [...prev];
         if (updated.length > 0) {
           updated[updated.length - 1] = {
             ...updated[updated.length - 1],
             messages: [...updated[updated.length - 1].messages, newMessage],
-            quickReplies: undefined, // Eliminar las respuestas rápidas después de la selección
+            quickReplies: undefined, // Remove quick replies after selection
           };
         }
         return updated;
       });
 
-      // Manejar la confirmación de información del negocio
+      // Handle business information confirmation
       if (currentSectionIndex === 0) {
         if (value === "correct") {
           setCorrectInfo(true);
-          // Si es correcta, avanzamos al paso de la historia de éxito
+          // If correct, advance to the success story section
           setTimeout(() => {
             setCurrentSectionIndex(3);
           }, 500);
           return;
         } else if (value === "incorrect") {
           setCorrectInfo(false);
-          // Si es incorrecta, avanzamos al paso para corregir el tipo de negocio
+          // If incorrect, advance to the business type selection
           setTimeout(() => {
             setCurrentSectionIndex(1);
           }, 500);
@@ -1175,163 +1177,142 @@ const ChatInterface: React.FC = () => {
         }
       }
 
-      // Manejar el tipo de negocio en caso de información incorrecta
-      if (currentSectionIndex === 1 && !correctInfo) {
-        if (value === "retail") setBusinessType("Tienda / Bodega");
-        else if (value === "restaurant") setBusinessType("Restaurante");
-        else if (value === "services") setBusinessType("Servicios");
-        else if (value === "manufacturing") setBusinessType("Manufactura");
-        else setBusinessType("Otro");
-        
+      // Fix: After showing Carmen's success story (index 3), move to the awareness section (index 4)
+      if (currentSectionIndex === 3) {
         setTimeout(() => {
-          setCurrentSectionIndex(2); // Ir a preguntar por la ubicación
+          setCurrentSectionIndex(4); // Move to the awareness section
         }, 500);
         return;
       }
 
-      // Manejar la ubicación del negocio en caso de información incorrecta
-      if (currentSectionIndex === 2 && !correctInfo) {
-        if (value === "lima-center") setBusinessLocation("Lima Centro");
-        else if (value === "lima-north") setBusinessLocation("Lima Norte");
-        else if (value === "lima-south") setBusinessLocation("Lima Sur");
-        else if (value === "lima-east") setBusinessLocation("Lima Este");
-        else if (value === "callao") setBusinessLocation("Callao");
-        else setBusinessLocation("Otra región");
-        
-        setTimeout(() => {
-          setCurrentSectionIndex(3); // Ir a la historia de éxito
-        }, 500);
-        return;
-      }
-
-      // Manejar la explicación del plan
+      // Handle the explanation of the plan
       if (currentSectionIndex === 4) {
         if (value === "more-info") {
           setTimeout(() => {
-            setCurrentSectionIndex(5); // Ir a la explicación del plan
+            setCurrentSectionIndex(5); // Move to the plan explanation
           }, 500);
           return;
         } else if (value === "later") {
           setWaitingForReadyConfirmation(true);
           setTimeout(() => {
-            setCurrentSectionIndex(6); // Esperar a que esté listo
+            setCurrentSectionIndex(6); // Wait for ready confirmation
           }, 500);
           return;
         }
       }
 
-      // Después de la explicación del plan
+      // After the plan explanation
       if (currentSectionIndex === 5) {
         if (value === "later") {
           setWaitingForReadyConfirmation(true);
           setTimeout(() => {
-            setCurrentSectionIndex(6); // Esperar a que esté listo
+            setCurrentSectionIndex(6); // Wait for ready confirmation
           }, 500);
           return;
         }
       }
 
-      // Para los desafíos
+      // For the challenges
       if (currentSectionIndex === 17) {
         if (value === "start-first") {
-          // Generar un PIN aleatorio de 6 dígitos
+          // Generate a random 6-digit PIN
           const pin = Math.floor(100000 + Math.random() * 900000).toString();
           setExpectedPin(pin);
-          setCurrentChallenge("restaurant-inventory"); // El ID del primer desafío
+          setCurrentChallenge("restaurant-inventory"); // ID of the first challenge
           
           setTimeout(() => {
-            setCurrentSectionIndex(23); // Ir a start-challenge
+            setCurrentSectionIndex(23); // Go to start-challenge
           }, 500);
           return;
         } else if (value === "how-to") {
           setTimeout(() => {
-            setCurrentSectionIndex(18); // Ir a la explicación de cómo completar los desafíos
+            setCurrentSectionIndex(18); // Go to how-to-challenges
           }, 500);
           return;
         } else if (value === "later") {
           setWaitingForReadyConfirmation(true);
           setTimeout(() => {
-            setCurrentSectionIndex(6); // Esperar a que esté listo
+            setCurrentSectionIndex(6); // Wait for ready confirmation
           }, 500);
           return;
         }
       }
 
-      // Desde la explicación de cómo completar desafíos
+      // From the how-to-challenges
       if (currentSectionIndex === 18) {
         if (value === "start-first") {
-          // Generar un PIN aleatorio de 6 dígitos
+          // Generate a random 6-digit PIN
           const pin = Math.floor(100000 + Math.random() * 900000).toString();
           setExpectedPin(pin);
-          setCurrentChallenge("restaurant-inventory"); // El ID del primer desafío
+          setCurrentChallenge("restaurant-inventory"); // ID of the first challenge
           
           setTimeout(() => {
-            setCurrentSectionIndex(23); // Ir a start-challenge
+            setCurrentSectionIndex(23); // Go to start-challenge
           }, 500);
           return;
         } else if (value === "later") {
           setWaitingForReadyConfirmation(true);
           setTimeout(() => {
-            setCurrentSectionIndex(6); // Esperar a que esté listo
+            setCurrentSectionIndex(6); // Wait for ready confirmation
           }, 500);
           return;
         }
       }
 
-      // Después de mostrar el enlace del desafío
+      // After showing the challenge link
       if (currentSectionIndex === 23) {
-        // Aquí simulamos que el usuario ha visitado el enlace y ahora debe verificar
+        // Simulate that the user has visited the link and now needs to verify
         setVerifyingPin(true);
         setTimeout(() => {
-          setCurrentSectionIndex(24); // Ir a verify-challenge
+          setCurrentSectionIndex(24); // Go to verify-challenge
         }, 500);
         return;
       }
 
-      // Después de incorrecto PIN
+      // After incorrect PIN
       if (currentSectionIndex === 26) {
         setVerifyingPin(true);
         setTimeout(() => {
-          setCurrentSectionIndex(24); // Volver a verify-challenge
+          setCurrentSectionIndex(24); // Go to verify-challenge
         }, 500);
         return;
       }
 
-      // Lógica especial para el plan de contingencia según el tipo de negocio
+      // Special handling for contingency plan based on business type
       if (currentSectionIndex === 28 && value === "yes-advice") {
-        // Para este demo, siempre vamos al plan de restaurante
+        // For this demo, always go to the restaurant contingency plan
         setTimeout(() => {
-          setCurrentSectionIndex(29); // índice de contingency-plan-restaurant
+          setCurrentSectionIndex(29); // Index of contingency-plan-restaurant
         }, 500);
         return;
       }
 
-      // Más información sobre el plan de contingencia
+      // More contingency information
       if (currentSectionIndex === 29 && value === "more-info") {
         setTimeout(() => {
-          setCurrentSectionIndex(30); // índice de more-contingency-info
+          setCurrentSectionIndex(30); // Index of more-contingency-info
         }, 500);
         return;
       }
 
-      // Después del desastre
+      // After disaster
       if (currentSectionIndex === 31 && (value === "some-damage" || value === "serious-damage")) {
         setDamageAssessment(true);
         setTimeout(() => {
-          setCurrentSectionIndex(32); // índice de damage-assessment
+          setCurrentSectionIndex(32); // Index of damage-assessment
         }, 500);
         return;
       }
 
-      // Comenzar evaluación de daños
+      // Start damage assessment questions
       if (currentSectionIndex === 32 && value === "start-assessment") {
         setTimeout(() => {
-          setCurrentSectionIndex(33); // Primera pregunta de daños
+          setCurrentSectionIndex(33); // First question of damage assessment
         }, 500);
         return;
       }
 
-      // Avanzar a la siguiente sección (comportamiento normal)
+      // Advance to the next section (normal behavior)
       setTimeout(() => {
         setCurrentSectionIndex(prev => prev + 1);
       }, 500);
@@ -1339,18 +1320,18 @@ const ChatInterface: React.FC = () => {
   };
 
   const handleSelectChallenge = (challengeId: string) => {
-    // Generar un PIN aleatorio de 6 dígitos
+    // Generate a random 6-digit PIN
     const pin = Math.floor(100000 + Math.random() * 900000).toString();
     setExpectedPin(pin);
     setCurrentChallenge(challengeId);
     
     setTimeout(() => {
-      setCurrentSectionIndex(23); // Ir a start-challenge
+      setCurrentSectionIndex(23); // Go to start-challenge
     }, 500);
   };
 
   const renderChallenges = (challenges: Challenge[]) => {
-    // Filtrar desafíos específicos para el tipo de negocio actual o los generales
+    // Filter desafíos específicos para el tipo de negocio actual o los generales
     const filteredChallenges = challenges.filter(
       challenge => challenge.businessType === businessType || challenge.businessType === "general"
     );
@@ -1369,7 +1350,7 @@ const ChatInterface: React.FC = () => {
   };
 
   const handleSelectCourse = (courseId: string) => {
-    // En una app real, esto navegaría a los detalles del curso
+    // In a real app, this would navigate to the details of the course
     console.log("Curso seleccionado:", courseId);
   };
 
@@ -1446,7 +1427,7 @@ const ChatInterface: React.FC = () => {
   };
 
   const renderChallengeLink = (challengeId: string) => {
-    // En una app real, esto sería un enlace a la página del desafío
+    // In a real app, this would be a link to the challenge page
     const fakeUrl = `https://app.contigoemprendedor.pe/desafios/${challengeId}`;
     
     return (
@@ -1463,10 +1444,10 @@ const ChatInterface: React.FC = () => {
           className="block mt-2 text-whatsapp-green font-medium text-sm"
           onClick={(e) => {
             e.preventDefault();
-            // Simulamos que el usuario completa el desafío
+            // Simulate that the user completes the challenge
             setTimeout(() => {
               setVerifyingPin(true);
-              setCurrentSectionIndex(24); // Ir a verify-challenge
+              setCurrentSectionIndex(24); // Go to verify-challenge
             }, 1000);
           }}
         >
