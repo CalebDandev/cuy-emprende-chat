@@ -1192,6 +1192,12 @@ const ChatInterface: React.FC = () => {
             setCurrentSectionIndex(5); // Move to the plan explanation
           }, 500);
           return;
+        } else if (value === "ready") {
+          // FIX: When user selects they're ready to start
+          setTimeout(() => {
+            setCurrentSectionIndex(8); // Go directly to staff-info instead of waiting
+          }, 500);
+          return;
         } else if (value === "later") {
           setWaitingForReadyConfirmation(true);
           setTimeout(() => {
@@ -1203,7 +1209,13 @@ const ChatInterface: React.FC = () => {
 
       // After the plan explanation
       if (currentSectionIndex === 5) {
-        if (value === "later") {
+        if (value === "start-now") {
+          // FIX: When user selects to start now after explanation
+          setTimeout(() => {
+            setCurrentSectionIndex(8); // Go directly to staff-info
+          }, 500);
+          return;
+        } else if (value === "later") {
           setWaitingForReadyConfirmation(true);
           setTimeout(() => {
             setCurrentSectionIndex(6); // Wait for ready confirmation
