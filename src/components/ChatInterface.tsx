@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils";
 import ChatMessage, { ChatMessageProps } from "./ChatMessage";
 import QuickReply from "./QuickReply";
 import CuyAvatar from "./CuyAvatar";
-import { Send, Paperclip, Mic, ArrowLeft, MoreVertical, ExternalLink } from "lucide-react";
-import ChallengeCard, { Challenge } from "./ChallengeCard";
+import { Send, Paperclip, Mic, ArrowLeft, MoreVertical, ExternalLink, AlertTriangle, Umbrella, CloudRain, LifeBuoy } from "lucide-react";
 import CoursesRoadmap, { Course } from "./CoursesRoadmap";
 import CuyCoins from "./CuyCoins";
 import ProgressIndicator from "./ProgressIndicator";
@@ -20,8 +19,8 @@ interface ConversationSection {
     label: string;
     value: string;
   }[];
-  challenge?: Challenge;
-  challenges?: Challenge[];
+  challenge?: any;
+  challenges?: any[];
   courses?: Course[];
   component?: "progress" | "challenge" | "challenges" | "roadmap" | "reward" | "risk" | "testimonial";
   componentProps?: any;
@@ -43,7 +42,7 @@ const ChatInterface: React.FC = () => {
   const [riskLevel, setRiskLevel] = useState<"low" | "medium" | "high">("medium");
   const [verifyingPin, setVerifyingPin] = useState(false);
   const [expectedPin, setExpectedPin] = useState("");
-  const [currentChallenge, setCurrentChallenge] = useState("");
+  const [currentCourse, setCurrentCourse] = useState("");
   const [waitingForReadyConfirmation, setWaitingForReadyConfirmation] = useState(false);
   const [damageAssessment, setDamageAssessment] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -61,7 +60,7 @@ const ChatInterface: React.FC = () => {
         },
         {
           id: "intro-2",
-          content: "Estoy aquí para ayudarte a crear un plan de contingencia para tu negocio de vinos y destilados, y así estar preparado ante cualquier emergencia que pueda afectar tu emprendimiento.",
+          content: "Estoy aquí para ayudarte a crear un plan de contingencia para tu negocio de vinos y destilados, y así estar preparado ante cualquier emergencia que pueda afectar tu emprendimiento. 🛡️",
           type: "received",
           timestamp: new Date(),
         },
@@ -87,7 +86,7 @@ const ChatInterface: React.FC = () => {
       messages: [
         {
           id: "story-1",
-          content: "¡Perfecto! Antes de comenzar, me gustaría compartir contigo la historia de María, una emprendedora como tú.",
+          content: "¡Perfecto! Antes de comenzar, me gustaría compartir contigo la historia de María, una emprendedora como tú. 📖",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
@@ -204,6 +203,98 @@ const ChatInterface: React.FC = () => {
       ],
     },
     {
+      id: "question-insurance",
+      messages: [
+        {
+          id: "insurance-1",
+          content: "Gracias por la información. 📊",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "insurance-2",
+          content: "¿Tienes algún seguro que cubra a tu negocio en caso de emergencias?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, tengo seguro completo", value: "full-insurance" },
+        { label: "Solo seguro básico", value: "basic-insurance" },
+        { label: "No tengo seguros", value: "no-insurance" },
+      ],
+    },
+    {
+      id: "question-backup",
+      messages: [
+        {
+          id: "backup-1",
+          content: "Entendido. Continúo evaluando tu nivel de preparación. 🧮",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "backup-2",
+          content: "¿Tienes copias de seguridad de la información importante de tu negocio (recetas, clientes, proveedores)?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, en digital y físico", value: "full-backup" },
+        { label: "Solo copias físicas", value: "physical-backup" },
+        { label: "No tengo copias", value: "no-backup" },
+      ],
+    },
+    {
+      id: "question-emergency-plan",
+      messages: [
+        {
+          id: "plan-1",
+          content: "Vamos avanzando bien. 👍",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "plan-2",
+          content: "¿Has establecido un plan de evacuación y puntos de encuentro con tu equipo en caso de emergencia?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, está implementado", value: "implemented" },
+        { label: "Lo tengo pensado pero no formalizado", value: "planned" },
+        { label: "No he pensado en eso", value: "none" },
+      ],
+    },
+    {
+      id: "question-supply",
+      messages: [
+        {
+          id: "supply-1",
+          content: "Una pregunta más para completar tu evaluación. 📋",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "supply-2",
+          content: "¿Cuentas con proveedores alternativos en caso de que tus proveedores habituales se vean afectados por una emergencia?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, tengo opciones identificadas", value: "alternatives" },
+        { label: "Solo para algunos insumos", value: "partial" },
+        { label: "No, dependo de mis proveedores actuales", value: "dependent" },
+      ],
+    },
+    {
       id: "risk-evaluation",
       messages: [
         {
@@ -215,7 +306,7 @@ const ChatInterface: React.FC = () => {
         },
         {
           id: "evaluation-2",
-          content: "Estoy evaluando el nivel de riesgo actual de tu bodega...",
+          content: "Estoy evaluando tu perfil de riesgo actual para Bodega De Liz...",
           type: "received",
           timestamp: new Date(),
         },
@@ -223,10 +314,12 @@ const ChatInterface: React.FC = () => {
       component: "risk",
       componentProps: {
         level: "medium",
-        message: "Tu bodega tiene un nivel medio de vulnerabilidad. Con algunas medidas adicionales, podrías reducir significativamente los riesgos."
+        message: "Tu bodega tiene un nivel medio de vulnerabilidad. Con algunas medidas adicionales, podrías reducir significativamente los riesgos.",
+        rewardPoints: 25,
+        showMoreUrl: "#"
       },
       quickReplies: [
-        { label: "Ver mi plan de contingencia", value: "see-plan" },
+        { label: "Ver medidas rápidas recomendadas", value: "see-plan" },
       ],
     },
     {
@@ -234,7 +327,7 @@ const ChatInterface: React.FC = () => {
       messages: [
         {
           id: "plan-1",
-          content: "He creado un plan de contingencia específico para Bodega De Liz: 📋",
+          content: "He creado recomendaciones específicas para Bodega De Liz: 📋",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
@@ -295,92 +388,237 @@ const ChatInterface: React.FC = () => {
       componentProps: [
         {
           id: "course-1",
-          title: "Gestión de riesgos para bodegas",
-          description: "Fundamentos básicos para identificar y mitigar riesgos en tu bodega",
+          title: "Conoce los procesos claves de tu negocio",
+          description: "Fundamentos básicos para identificar y asegurar los procesos críticos de tu bodega",
           status: "available",
-          progress: 0
+          progress: 0,
+          topics: [
+            "Identificación de procesos críticos en tu bodega",
+            "Cómo priorizar actividades en caso de emergencia",
+            "Evaluación de impacto en la cadena de valor"
+          ],
+          benefits: [
+            "Minimizar interrupciones en tu operación",
+            "Proteger tus activos más valiosos",
+            "Recuperar rápidamente la operatividad"
+          ],
+          duration: "45 minutos",
+          url: "#curso-1"
         },
         {
           id: "course-2",
-          title: "Protección de activos vitivinícolas",
+          title: "Protege lo más importante",
           description: "Aprende a proteger tus productos y equipos especializados",
           status: "locked",
           unlockCost: 50
         },
         {
           id: "course-3",
-          title: "Plan de continuidad de negocio",
-          description: "Estrategias avanzadas para mantener el negocio operativo tras emergencias",
+          title: "Crea un fondo de emergencia",
+          description: "Estrategias financieras para asegurar la continuidad de tu bodega",
           status: "locked",
           unlockCost: 75
+        },
+        {
+          id: "course-4",
+          title: "Digitaliza tu información importante",
+          description: "Respaldo digital seguro para tus datos críticos",
+          status: "locked",
+          unlockCost: 40
+        },
+        {
+          id: "course-5",
+          title: "Prepara un plan de comunicación en emergencias",
+          description: "Mantén informados a clientes, proveedores y colaboradores",
+          status: "locked",
+          unlockCost: 60
+        },
+        {
+          id: "course-6",
+          title: "Planifica cómo continuar operando y reabastecerte",
+          description: "Estrategias para la recuperación rápida post-emergencia",
+          status: "locked",
+          unlockCost: 80
         }
       ],
       quickReplies: [
-        { label: "Conocer desafíos disponibles", value: "challenges" },
+        { label: "Comenzar primer curso", value: "start-course" },
       ],
     },
     {
-      id: "challenges-intro",
+      id: "course-completion",
       messages: [
         {
-          id: "challenges-1",
-          content: "Además de los cursos, tenemos desafíos prácticos que te ayudarán a preparar mejor tu negocio. 🏆",
+          id: "completion-1",
+          content: "¡Felicidades, Lizet! 🎉 Has completado exitosamente el curso 'Conoce los procesos claves de tu negocio'.",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
-          id: "challenges-2",
-          content: "Al completarlos, ganarás Soles de Resiliencia que podrás canjear por beneficios como:",
+          id: "completion-2",
+          content: "Has ganado 30 puntos de resiliencia que ya fueron acreditados a tu cuenta.",
           type: "received",
           timestamp: new Date(),
         },
         {
-          id: "challenges-3",
-          content: "• Descuentos en seguros para tu negocio 💰\n• Acceso a cursos premium 🔓\n• Asesorías personalizadas con expertos 👨‍💼\n• Herramientas digitales para tu negocio 🛠️",
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "challenges-4",
-          content: "Estos son los desafíos disponibles para ti:",
+          id: "completion-3",
+          content: "¿Te gustaría continuar con el siguiente módulo: 'Protege lo más importante'?",
           type: "received",
           timestamp: new Date(),
         },
       ],
-      component: "challenges",
-      componentProps: [
+      component: "reward",
+      componentProps: {
+        achievement: "¡Curso completado!",
+        coins: 30
+      },
+      quickReplies: [
+        { label: "En otro momento", value: "later" },
+      ],
+    },
+    {
+      id: "emergency-alert",
+      messages: [
         {
-          id: "challenge-1",
-          title: "Plan de evacuación",
-          description: "Crea y documenta un plan de evacuación para tu bodega con rutas señalizadas",
-          status: "not-started",
-          reward: 25,
-          dueDate: new Date(new Date().setDate(new Date().getDate() + 14)),
-          priority: "high",
-          businessType: "Negocio de elaboración y venta de vinos y destilados"
+          id: "alert-1",
+          content: "⚠️ ALERTA DE EMERGENCIA ⚠️",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
         },
         {
-          id: "challenge-2",
-          title: "Inventario asegurado",
-          description: "Registra tu inventario completo y comparte copia en la nube",
-          status: "not-started",
-          reward: 15,
-          priority: "medium",
-          businessType: "Negocio de elaboración y venta de vinos y destilados"
+          id: "alert-2",
+          content: "Lizet, el SENAMHI ha emitido una alerta de lluvias intensas para la zona de Barranca en las próximas 48 horas. Se esperan precipitaciones de hasta 30mm. 🌧️",
+          type: "received",
+          timestamp: new Date(),
         },
         {
-          id: "challenge-3",
-          title: "Soportes antisísmicos",
-          description: "Instala soportes para tus barricas y estanterías y comparte fotos",
-          status: "not-started",
-          reward: 30,
-          priority: "high",
-          businessType: "Negocio de elaboración y venta de vinos y destilados"
-        }
+          id: "alert-3",
+          content: "Recuerda aplicar lo aprendido en el curso: prioriza tu seguridad y la de tu equipo, asegura la documentación importante y verifica tus sistemas de drenaje. 🛡️",
+          type: "received",
+          timestamp: new Date(),
+        },
       ],
       quickReplies: [
-        { label: "¡Gracias por la información!", value: "thanks" },
+        { label: "Gracias por el aviso", value: "thanks-alert" },
+      ],
+    },
+    {
+      id: "emergency-followup",
+      messages: [
+        {
+          id: "followup-1",
+          content: "Lizet, han pasado 24 horas desde la alerta. ¿Cómo estás? ¿Todo bien con tu familia y equipo? 🙏",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Estamos todos bien, gracias", value: "all-good" },
+      ],
+    },
+    {
+      id: "damage-assessment",
+      messages: [
+        {
+          id: "damage-1",
+          content: "Me alegra saber que están bien. 😊",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "damage-2",
+          content: "Ahora necesitamos evaluar si hubo daños en tu bodega. Por favor, cuéntame si observaste alguna de estas situaciones:",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Hay filtraciones en el techo", value: "roof-damage" },
+      ],
+    },
+    {
+      id: "damage-details",
+      messages: [
+        {
+          id: "details-1",
+          content: "Entiendo. Las filtraciones pueden dañar tanto la estructura como tu producto. 📋",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "details-2",
+          content: "¿Pudiste proteger tus barricas y botellas del agua?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, las cubrí a tiempo", value: "protected" },
+      ],
+    },
+    {
+      id: "final-assessment",
+      messages: [
+        {
+          id: "final-1",
+          content: "¡Excelente trabajo aplicando lo aprendido! 👍",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "final-2",
+          content: "Basado en tu información, el daño es principalmente estructural pero has logrado proteger tu producto. Te recomendaría:",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "final-3",
+          content: "1️⃣ Contactar a un técnico para revisar y reparar las filtraciones\n2️⃣ Verificar si hay humedad en las paredes\n3️⃣ Instalar un deshumidificador temporalmente",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "final-4",
+          content: "Te estamos conectando con un voluntario de BCP que te brindará asesoría sobre cómo gestionar la reparación. Te contactará en las próximas 2 horas. 🤝",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Gracias por la ayuda", value: "thanks-help" },
+      ],
+    },
+    {
+      id: "market-info",
+      messages: [
+        {
+          id: "market-1",
+          content: "¡Con gusto, Lizet! 💪",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "market-2",
+          content: "Si en el futuro tuvieras pérdidas significativas en tus productos, recuerda que puedes acceder al Mercado Solidario de BCP, donde podrás recibir apoyo para recuperar tu inventario.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "market-3",
+          content: "Para más información, visita: www.mercadosolidariobcp.pe",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Finalizar conversación", value: "end" },
       ],
     },
     {
@@ -388,14 +626,14 @@ const ChatInterface: React.FC = () => {
       messages: [
         {
           id: "closing-1",
-          content: "¡Con gusto, Lizet! 😊 Estoy aquí para apoyarte en el camino hacia un negocio más resiliente.",
+          content: "Ha sido un gusto asistirte, Lizet. 😊 Estoy aquí para apoyarte en el camino hacia un negocio más resiliente.",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
           id: "closing-2",
-          content: "Recuerda que puedes volver a consultarme cuando lo necesites para revisar tu plan de contingencia o acceder a nuevos desafíos y cursos.",
+          content: "Recuerda que puedes volver a consultarme cuando lo necesites para revisar tu plan de contingencia o acceder a nuevos cursos.",
           type: "received",
           timestamp: new Date(),
         },
@@ -433,6 +671,12 @@ const ChatInterface: React.FC = () => {
       
       if (currentSection.component === "reward" && currentSection.componentProps?.coins) {
         setCuyCoins(prev => prev + currentSection.componentProps.coins);
+        setShowReward(true);
+        setTimeout(() => setShowReward(false), 3000);
+      }
+
+      if (currentSection.component === "risk" && currentSection.componentProps?.rewardPoints) {
+        setCuyCoins(prev => prev + currentSection.componentProps.rewardPoints);
         setShowReward(true);
         setTimeout(() => setShowReward(false), 3000);
       }
@@ -599,6 +843,20 @@ const ChatInterface: React.FC = () => {
         }, 1000);
         return;
       }
+      
+      // Handle damage assessment specifically
+      if (value === "roof-damage" || value === "protected") {
+        setDamageAssessment(true);
+      }
+
+      // If user selects "start-course", show course completion directly
+      if (value === "start-course") {
+        setTimeout(() => {
+          // Show course completion after a delay to simulate completing the course
+          setCurrentSectionIndex(prev => prev + 1);
+        }, 2000);
+        return;
+      }
 
       setTimeout(() => {
         setCurrentSectionIndex(prev => prev + 1);
@@ -606,91 +864,40 @@ const ChatInterface: React.FC = () => {
     }
   };
 
-  const handleSelectChallenge = (challengeId: string) => {
-    const pin = Math.floor(100000 + Math.random() * 900000).toString();
-    setExpectedPin(pin);
-    setCurrentChallenge(challengeId);
+  const handleSelectCourse = (courseId: string) => {
+    setCurrentCourse(courseId);
     
-    // Add a message about the selected challenge
-    const selectedChallenge = conversationFlow.find(section => 
-      section.component === "challenges")?.componentProps.find(
-        (c: Challenge) => c.id === challengeId
+    // Add a message about the selected course
+    const selectedCourse = conversationFlow.find(section => 
+      section.component === "roadmap")?.componentProps.find(
+        (c: Course) => c.id === courseId
       );
     
-    if (selectedChallenge) {
-      const challengeSection: ConversationSection = {
-        id: `selected-challenge-${Date.now()}`,
+    if (selectedCourse) {
+      const courseSection: ConversationSection = {
+        id: `selected-course-${Date.now()}`,
         messages: [
           {
-            id: `challenge-msg-1-${Date.now()}`,
-            content: `Has seleccionado el desafío: "${selectedChallenge.title}" 🎯`,
+            id: `course-msg-1-${Date.now()}`,
+            content: `Has seleccionado el curso: "${selectedCourse.title}" 📚`,
             type: "received",
             timestamp: new Date(),
             showAvatar: true,
           },
           {
-            id: `challenge-msg-2-${Date.now()}`,
-            content: "Puedes acceder a los detalles completos a través de este enlace:",
+            id: `course-msg-2-${Date.now()}`,
+            content: "¡Vamos a comenzar con el aprendizaje! Este curso te ayudará a desarrollar habilidades clave para la gestión de riesgos en tu bodega.",
             type: "received",
             timestamp: new Date(),
           }
         ],
         quickReplies: [
-          { label: "Ver más desafíos", value: "more-challenges" }
+          { label: "Comenzar curso", value: "start-course" }
         ]
       };
       
-      setSections(prev => [...prev, challengeSection]);
-      
-      setTimeout(() => {
-        const linkSection: ConversationSection = {
-          id: `challenge-link-${Date.now()}`,
-          messages: [],
-          component: "challenge",
-          challenge: selectedChallenge,
-        };
-        
-        setSections(prev => [...prev, linkSection]);
-      }, 500);
+      setSections(prev => [...prev, courseSection]);
     }
-  };
-
-  const renderChallenges = (challenges: Challenge[]) => {
-    const filteredChallenges = challenges.filter(
-      challenge => challenge.businessType === businessType || challenge.businessType === "general"
-    );
-
-    return (
-      <div className="space-y-4">
-        {filteredChallenges.map((challenge) => (
-          <ChallengeCard
-            key={challenge.id}
-            challenge={challenge}
-            onClick={handleSelectChallenge}
-          />
-        ))}
-      </div>
-    );
-  };
-
-  const handleSelectCourse = (courseId: string) => {
-    const courseSection: ConversationSection = {
-      id: `selected-course-${Date.now()}`,
-      messages: [
-        {
-          id: `course-msg-${Date.now()}`,
-          content: "¡Gran elección! Este curso te ayudará a desarrollar habilidades clave para la gestión de riesgos en tu negocio. 📚",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        }
-      ],
-      quickReplies: [
-        { label: "Volver a cursos", value: "back-to-courses" }
-      ]
-    };
-    
-    setSections(prev => [...prev, courseSection]);
   };
 
   const renderComponent = (component: string, props: any) => {
@@ -720,17 +927,9 @@ const ChatInterface: React.FC = () => {
           level={props.level} 
           message={props.message}
           className="my-2"
+          rewardPoints={props.rewardPoints}
+          showMoreUrl={props.showMoreUrl}
         />;
-      
-      case "challenge":
-        return props && <ChallengeCard 
-          challenge={props} 
-          onClick={handleSelectChallenge}
-          className="my-2"
-        />;
-      
-      case "challenges":
-        return props && renderChallenges(props);
       
       case "roadmap":
         return props && <CoursesRoadmap 
@@ -746,7 +945,7 @@ const ChatInterface: React.FC = () => {
             <div className="inline-flex items-center justify-center bg-white rounded-full px-4 py-2 shadow-lg">
               <CuyCoins count={props.coins} showAnimation size="lg" />
             </div>
-            <p className="mt-2 text-sm">¡Monedas Cuy añadidas a tu cuenta!</p>
+            <p className="mt-2 text-sm">¡Puntos de resiliencia añadidos a tu cuenta!</p>
           </div>
         );
 
@@ -763,48 +962,6 @@ const ChatInterface: React.FC = () => {
       default:
         return null;
     }
-  };
-
-  const renderChallengeLink = (challengeId: string) => {
-    const fakeUrl = `https://app.contigoemprendedor.pe/desafios/${challengeId}`;
-    
-    return (
-      <div className="bg-white rounded-lg p-4 my-2 shadow-sm border-l-4 border-whatsapp-green">
-        <div className="flex items-center justify-between">
-          <div>
-            <h4 className="font-medium text-gray-800">Enlace al desafío</h4>
-            <p className="text-sm text-gray-600">PIN de verificación: {expectedPin}</p>
-          </div>
-          <ExternalLink className="text-whatsapp-green w-5 h-5" />
-        </div>
-        <a 
-          href="#" 
-          className="block mt-2 text-whatsapp-green font-medium text-sm"
-          onClick={(e) => {
-            e.preventDefault();
-            setTimeout(() => {
-              setVerifyingPin(true);
-              // Show a message asking for the PIN
-              const pinSection: ConversationSection = {
-                id: `pin-request-${Date.now()}`,
-                messages: [
-                  {
-                    id: `pin-msg-${Date.now()}`,
-                    content: "Por favor, ingresa el PIN de verificación para confirmar que has completado el desafío:",
-                    type: "received",
-                    timestamp: new Date(),
-                    showAvatar: true,
-                  }
-                ]
-              };
-              setSections(prev => [...prev, pinSection]);
-            }, 1000);
-          }}
-        >
-          {fakeUrl}
-        </a>
-      </div>
-    );
   };
 
   if (!started) {
@@ -846,24 +1003,6 @@ const ChatInterface: React.FC = () => {
 
             {section.component && section.componentProps && (
               renderComponent(section.component, section.componentProps)
-            )}
-            
-            {section.component === "challenge" && section.challenge && (
-              renderComponent(section.component, section.challenge)
-            )}
-            
-            {section.component === "challenges" && section.challenges && (
-              renderComponent(section.component, section.challenges)
-            )}
-            
-            {section.component === "roadmap" && section.courses && (
-              renderComponent(section.component, section.courses)
-            )}
-
-            {sectionIndex === sections.length - 1 && 
-             section.component === "challenge" && 
-             section.challenge && (
-              renderChallengeLink(section.challenge.id)
             )}
 
             {section.quickReplies && (
