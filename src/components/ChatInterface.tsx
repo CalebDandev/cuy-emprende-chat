@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import ChatMessage, { ChatMessageProps } from "./ChatMessage";
@@ -72,43 +73,13 @@ const ChatInterface: React.FC = () => {
         },
         {
           id: "intro-4",
-          content: `Según nuestros registros, tienes ${businessName}, un ${businessType} ubicado en ${businessLocation}. ¿Es correcta esta información?`,
+          content: `Según nuestros registros, tienes ${businessName}, un ${businessType} ubicado en ${businessLocation}. ¿Es correcta esta información? ✅`,
           type: "received",
           timestamp: new Date(),
         },
       ],
       quickReplies: [
         { label: "Sí, es correcto", value: "correct" },
-      ],
-    },
-    {
-      id: "incorrect-business-info",
-      messages: [
-        {
-          id: "incorrect-1",
-          content: "Gracias por avisarme. Por favor, ¿a qué tipo de negocio te dedicas?",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      quickReplies: [
-        { label: "Negocio de vinos y destilados", value: "wine" },
-      ],
-    },
-    {
-      id: "incorrect-business-location",
-      messages: [
-        {
-          id: "incorrect-location-1",
-          content: "¿Y en qué distrito está ubicado tu negocio?",
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      quickReplies: [
-        { label: "Barranca, Lima", value: "barranca" },
       ],
     },
     {
@@ -161,7 +132,284 @@ const ChatInterface: React.FC = () => {
         { label: "¡Claro que sí! 🚀", value: "ready" },
       ],
     },
-    // ... [Previous sections remain the same but with single quickReplies]
+    {
+      id: "question-employees",
+      messages: [
+        {
+          id: "employees-1",
+          content: "¡Excelente decisión! 👏 Para crear un plan efectivo, necesito hacerte algunas preguntas sobre tu negocio.",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "employees-2",
+          content: "¿Cuántos empleados trabajan contigo en Bodega De Liz?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Solo yo", value: "solo" },
+        { label: "2-5 empleados", value: "small" },
+        { label: "6-10 empleados", value: "medium" },
+        { label: "Más de 10", value: "large" },
+      ],
+    },
+    {
+      id: "question-risk-assessment",
+      messages: [
+        {
+          id: "risk-1",
+          content: "¡Entendido! 📝 Ahora, sobre los riesgos que podrían afectar tu negocio...",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "risk-2",
+          content: "¿Cuál consideras que es el mayor riesgo para tu bodega de vinos?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sismos o terremotos", value: "earthquake" },
+        { label: "Inundaciones", value: "flood" },
+        { label: "Incendios", value: "fire" },
+        { label: "Cortes de energía", value: "power" },
+      ],
+    },
+    {
+      id: "question-equipment",
+      messages: [
+        {
+          id: "equipment-1",
+          content: "Es importante estar preparado para esos eventos. 🔍",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "equipment-2",
+          content: "¿Cuentas con algún equipo o sistema para mitigar daños en caso de emergencia?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, tengo extintores y botiquín", value: "basic" },
+        { label: "Solo tengo lo básico", value: "very-basic" },
+        { label: "No tengo nada aún", value: "none" },
+      ],
+    },
+    {
+      id: "risk-evaluation",
+      messages: [
+        {
+          id: "evaluation-1",
+          content: "Gracias por toda la información, Lizet. ⚙️",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "evaluation-2",
+          content: "Estoy evaluando el nivel de riesgo actual de tu bodega...",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      component: "risk",
+      componentProps: {
+        level: "medium",
+        message: "Tu bodega tiene un nivel medio de vulnerabilidad. Con algunas medidas adicionales, podrías reducir significativamente los riesgos."
+      },
+      quickReplies: [
+        { label: "Ver mi plan de contingencia", value: "see-plan" },
+      ],
+    },
+    {
+      id: "contingency-plan",
+      messages: [
+        {
+          id: "plan-1",
+          content: "He creado un plan de contingencia específico para Bodega De Liz: 📋",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "plan-2",
+          content: "1️⃣ **Protección de barricas**: Instala soportes antisísmicos para tus barricas y estanterías, reduciendo el riesgo de caídas.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "plan-3",
+          content: "2️⃣ **Sistema de respaldo energético**: Adquiere un generador para mantener la temperatura controlada en caso de cortes de energía.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "plan-4",
+          content: "3️⃣ **Plan de evacuación**: Establece y practica con tu equipo rutas de evacuación seguras, designando zonas de encuentro.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "plan-5",
+          content: "4️⃣ **Digitalización de registros**: Mantén copias digitales de tus fórmulas, procesos y registros de inventario en la nube.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "plan-6",
+          content: "¿Te gustaría conocer los cursos disponibles para implementar mejor este plan? 🎓",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Ver cursos recomendados", value: "courses" },
+      ],
+    },
+    {
+      id: "courses-roadmap",
+      messages: [
+        {
+          id: "courses-1",
+          content: "¡Excelente decisión! La formación continua fortalecerá tu negocio. 📚",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "courses-2",
+          content: "Aquí tienes una ruta de aprendizaje personalizada para Bodega De Liz:",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      component: "roadmap",
+      componentProps: [
+        {
+          id: "course-1",
+          title: "Gestión de riesgos para bodegas",
+          description: "Fundamentos básicos para identificar y mitigar riesgos en tu bodega",
+          status: "available",
+          progress: 0
+        },
+        {
+          id: "course-2",
+          title: "Protección de activos vitivinícolas",
+          description: "Aprende a proteger tus productos y equipos especializados",
+          status: "locked",
+          unlockCost: 50
+        },
+        {
+          id: "course-3",
+          title: "Plan de continuidad de negocio",
+          description: "Estrategias avanzadas para mantener el negocio operativo tras emergencias",
+          status: "locked",
+          unlockCost: 75
+        }
+      ],
+      quickReplies: [
+        { label: "Conocer desafíos disponibles", value: "challenges" },
+      ],
+    },
+    {
+      id: "challenges-intro",
+      messages: [
+        {
+          id: "challenges-1",
+          content: "Además de los cursos, tenemos desafíos prácticos que te ayudarán a preparar mejor tu negocio. 🏆",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "challenges-2",
+          content: "Al completarlos, ganarás Soles de Resiliencia que podrás canjear por beneficios como:",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "challenges-3",
+          content: "• Descuentos en seguros para tu negocio 💰\n• Acceso a cursos premium 🔓\n• Asesorías personalizadas con expertos 👨‍💼\n• Herramientas digitales para tu negocio 🛠️",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "challenges-4",
+          content: "Estos son los desafíos disponibles para ti:",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      component: "challenges",
+      componentProps: [
+        {
+          id: "challenge-1",
+          title: "Plan de evacuación",
+          description: "Crea y documenta un plan de evacuación para tu bodega con rutas señalizadas",
+          status: "not-started",
+          reward: 25,
+          dueDate: new Date(new Date().setDate(new Date().getDate() + 14)),
+          priority: "high",
+          businessType: "Negocio de elaboración y venta de vinos y destilados"
+        },
+        {
+          id: "challenge-2",
+          title: "Inventario asegurado",
+          description: "Registra tu inventario completo y comparte copia en la nube",
+          status: "not-started",
+          reward: 15,
+          priority: "medium",
+          businessType: "Negocio de elaboración y venta de vinos y destilados"
+        },
+        {
+          id: "challenge-3",
+          title: "Soportes antisísmicos",
+          description: "Instala soportes para tus barricas y estanterías y comparte fotos",
+          status: "not-started",
+          reward: 30,
+          priority: "high",
+          businessType: "Negocio de elaboración y venta de vinos y destilados"
+        }
+      ],
+      quickReplies: [
+        { label: "¡Gracias por la información!", value: "thanks" },
+      ],
+    },
+    {
+      id: "closing",
+      messages: [
+        {
+          id: "closing-1",
+          content: "¡Con gusto, Lizet! 😊 Estoy aquí para apoyarte en el camino hacia un negocio más resiliente.",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "closing-2",
+          content: "Recuerda que puedes volver a consultarme cuando lo necesites para revisar tu plan de contingencia o acceder a nuevos desafíos y cursos.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "closing-3",
+          content: "¡Te deseo mucho éxito con Bodega De Liz! 🍷",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Finalizar conversación", value: "end" },
+      ],
+    }
   ];
 
   useEffect(() => {
@@ -229,12 +477,28 @@ const ChatInterface: React.FC = () => {
       if (enteredPin === expectedPin) {
         setVerifyingPin(false);
         setTimeout(() => {
-          setCurrentSectionIndex(27);
+          setCurrentSectionIndex(currentSectionIndex + 1);
         }, 500);
       } else {
         setVerifyingPin(false);
         setTimeout(() => {
-          setCurrentSectionIndex(26);
+          // Handle incorrect PIN
+          const incorrectPinSection: ConversationSection = {
+            id: `incorrect-pin-${Date.now()}`,
+            messages: [
+              {
+                id: `incorrect-pin-msg-${Date.now()}`,
+                content: "Lo siento, el PIN ingresado es incorrecto. Por favor, intenta nuevamente.",
+                type: "received",
+                timestamp: new Date(),
+                showAvatar: true,
+              }
+            ],
+            quickReplies: [
+              { label: "Intentar nuevamente", value: "retry" }
+            ]
+          };
+          setSections(prev => [...prev, incorrectPinSection]);
         }, 500);
       }
       return;
@@ -263,7 +527,7 @@ const ChatInterface: React.FC = () => {
       setWaitingForReadyConfirmation(false);
       
       setTimeout(() => {
-        setCurrentSectionIndex(8);
+        setCurrentSectionIndex(currentSectionIndex + 1);
       }, 500);
       return;
     }
@@ -295,7 +559,7 @@ const ChatInterface: React.FC = () => {
     
     if (damageAssessment) {
       setTimeout(() => {
-        setCurrentSectionIndex(prev => prev + 1);
+        setCurrentSectionIndex(currentSectionIndex + 1);
       }, 500);
       return;
     }
@@ -326,6 +590,16 @@ const ChatInterface: React.FC = () => {
         return updated;
       });
 
+      // If the user selects "end" in the closing section, go back to WhatsApp list
+      if (value === "end" && currentSectionIndex === conversationFlow.length - 1) {
+        setTimeout(() => {
+          setStarted(false);
+          setSections([]);
+          setCurrentSectionIndex(0);
+        }, 1000);
+        return;
+      }
+
       setTimeout(() => {
         setCurrentSectionIndex(prev => prev + 1);
       }, 500);
@@ -337,9 +611,48 @@ const ChatInterface: React.FC = () => {
     setExpectedPin(pin);
     setCurrentChallenge(challengeId);
     
-    setTimeout(() => {
-      setCurrentSectionIndex(23);
-    }, 500);
+    // Add a message about the selected challenge
+    const selectedChallenge = conversationFlow.find(section => 
+      section.component === "challenges")?.componentProps.find(
+        (c: Challenge) => c.id === challengeId
+      );
+    
+    if (selectedChallenge) {
+      const challengeSection: ConversationSection = {
+        id: `selected-challenge-${Date.now()}`,
+        messages: [
+          {
+            id: `challenge-msg-1-${Date.now()}`,
+            content: `Has seleccionado el desafío: "${selectedChallenge.title}" 🎯`,
+            type: "received",
+            timestamp: new Date(),
+            showAvatar: true,
+          },
+          {
+            id: `challenge-msg-2-${Date.now()}`,
+            content: "Puedes acceder a los detalles completos a través de este enlace:",
+            type: "received",
+            timestamp: new Date(),
+          }
+        ],
+        quickReplies: [
+          { label: "Ver más desafíos", value: "more-challenges" }
+        ]
+      };
+      
+      setSections(prev => [...prev, challengeSection]);
+      
+      setTimeout(() => {
+        const linkSection: ConversationSection = {
+          id: `challenge-link-${Date.now()}`,
+          messages: [],
+          component: "challenge",
+          challenge: selectedChallenge,
+        };
+        
+        setSections(prev => [...prev, linkSection]);
+      }, 500);
+    }
   };
 
   const renderChallenges = (challenges: Challenge[]) => {
@@ -361,7 +674,23 @@ const ChatInterface: React.FC = () => {
   };
 
   const handleSelectCourse = (courseId: string) => {
-    console.log("Curso seleccionado:", courseId);
+    const courseSection: ConversationSection = {
+      id: `selected-course-${Date.now()}`,
+      messages: [
+        {
+          id: `course-msg-${Date.now()}`,
+          content: "¡Gran elección! Este curso te ayudará a desarrollar habilidades clave para la gestión de riesgos en tu negocio. 📚",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        }
+      ],
+      quickReplies: [
+        { label: "Volver a cursos", value: "back-to-courses" }
+      ]
+    };
+    
+    setSections(prev => [...prev, courseSection]);
   };
 
   const renderComponent = (component: string, props: any) => {
@@ -455,7 +784,20 @@ const ChatInterface: React.FC = () => {
             e.preventDefault();
             setTimeout(() => {
               setVerifyingPin(true);
-              setCurrentSectionIndex(24);
+              // Show a message asking for the PIN
+              const pinSection: ConversationSection = {
+                id: `pin-request-${Date.now()}`,
+                messages: [
+                  {
+                    id: `pin-msg-${Date.now()}`,
+                    content: "Por favor, ingresa el PIN de verificación para confirmar que has completado el desafío:",
+                    type: "received",
+                    timestamp: new Date(),
+                    showAvatar: true,
+                  }
+                ]
+              };
+              setSections(prev => [...prev, pinSection]);
             }, 1000);
           }}
         >
@@ -519,9 +861,9 @@ const ChatInterface: React.FC = () => {
             )}
 
             {sectionIndex === sections.length - 1 && 
-             currentSectionIndex === 23 && 
-             currentChallenge && (
-              renderChallengeLink(currentChallenge)
+             section.component === "challenge" && 
+             section.challenge && (
+              renderChallengeLink(section.challenge.id)
             )}
 
             {section.quickReplies && (
