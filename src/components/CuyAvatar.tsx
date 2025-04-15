@@ -22,9 +22,9 @@ const CuyAvatar: React.FC<CuyAvatarProps> = ({
   return (
     <div className={cn("relative rounded-full", className)}>
       <div className={cn("rounded-full overflow-hidden", sizeClasses[size])}>
-        <div className="bg-bcp-orange w-full h-full flex items-center justify-center text-white font-bold relative">
-          {/* Cuy avatar image */}
-          <span role="img" aria-label="cuy" className="text-xl">🐹</span>
+        <div className="bg-bcp-orange w-full h-full flex items-center justify-center text-white font-bold">
+          {/* This would be an actual Cuy image in a real implementation */}
+          Cuy
         </div>
       </div>
       {status && (
