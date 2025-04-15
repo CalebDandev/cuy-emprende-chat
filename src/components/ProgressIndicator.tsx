@@ -7,22 +7,34 @@ interface ProgressIndicatorProps {
   currentStep: number;
   labels?: string[];
   className?: string;
+  // Add support for alternative props pattern
+  value?: number;
+  total?: number;
+  label?: string;
 }
 
 const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   steps,
   currentStep,
   labels,
+  value,
+  total,
+  label,
   className,
 }) => {
+  // Support both API patterns: steps/currentStep OR value/total
+  const actualSteps = steps || (total || 5);
+  const actualCurrentStep = currentStep || (value || 0);
+  const actualLabels = labels || (label ? [label] : undefined);
+  
   return (
     <div className={cn("w-full py-4", className)}>
       <div className="relative">
         <div className="overflow-hidden">
           <div className="flex items-center justify-between">
-            {Array.from({ length: steps }).map((_, index) => {
-              const isCompleted = index < currentStep;
-              const isCurrent = index === currentStep;
+            {Array.from({ length: actualSteps }).map((_, index) => {
+              const isCompleted = index < actualCurrentStep;
+              const isCurrent = index === actualCurrentStep;
               
               return (
                 <React.Fragment key={index}>
@@ -54,21 +66,21 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
           </div>
         </div>
 
-        {labels && (
+        {actualLabels && (
           <div className="flex justify-between mt-1">
-            {labels.map((label, index) => (
+            {actualLabels.map((labelText, index) => (
               <span
                 key={index}
                 className={cn(
                   "text-xs",
-                  index < currentStep
+                  index < actualCurrentStep
                     ? "text-bcp-blue"
-                    : index === currentStep
+                    : index === actualCurrentStep
                     ? "text-bcp-blue font-medium"
                     : "text-gray-400"
                 )}
               >
-                {label}
+                {labelText}
               </span>
             ))}
           </div>
