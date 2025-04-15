@@ -10,8 +10,8 @@ interface TestimonialCardProps {
   location: string;
   quote: string;
   imageSrc: string;
-  rewardPoints?: number;
   className?: string;
+  rewardPoints?: number;
 }
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({
@@ -20,8 +20,8 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
   location,
   quote,
   imageSrc,
-  rewardPoints,
   className,
+  rewardPoints
 }) => {
   return (
     <div
@@ -59,12 +59,11 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         <div className="flex items-center gap-2">
           {rewardPoints && (
             <div className="flex items-center text-xs text-gray-600">
-              <span>Ver historia completa y gana</span>
-              <CuyCoins count={rewardPoints} size="sm" className="ml-1" />
+              Ganarás: <CuyCoins count={rewardPoints} size="sm" className="ml-1" />
             </div>
           )}
           <a href="#" className="text-bcp-blue flex items-center text-xs font-medium hover:underline">
-            <ExternalLink className="w-3 h-3 ml-1" />
+            Ver historia completa <ExternalLink className="w-3 h-3 ml-1" />
           </a>
         </div>
       </div>
