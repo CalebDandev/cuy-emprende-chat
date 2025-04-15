@@ -1,16 +1,15 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import ChatMessage, { ChatMessageProps } from "./ChatMessage";
 import QuickReply from "./QuickReply";
 import CuyAvatar from "./CuyAvatar";
-import { Send, Paperclip, Mic, ArrowLeft, MoreVertical, ExternalLink, AlertTriangle, Umbrella, CloudRain, LifeBuoy } from "lucide-react";
+import { Send, Paperclip, Mic, ArrowLeft, MoreVertical, ExternalLink } from "lucide-react";
 import CoursesRoadmap, { Course } from "./CoursesRoadmap";
 import CuyCoins from "./CuyCoins";
-import ProgressIndicator from "./ProgressIndicator";
 import RiskIndicator from "./RiskIndicator";
 import TestimonialCard from "./TestimonialCard";
 import WhatsAppList from "./WhatsAppList";
+import ProgressIndicator from "./ProgressIndicator";
 
 interface ConversationSection {
   id: string;
@@ -66,13 +65,13 @@ const ChatInterface: React.FC = () => {
         },
         {
           id: "intro-3",
-          content: "Si deseas conocer más sobre nuestras iniciativas para emprendedores, puedes visitar: https://www.viabcp.com",
+          content: "Para empezar, verifico que tengo la siguiente información de tu negocio:",
           type: "received",
           timestamp: new Date(),
         },
         {
           id: "intro-4",
-          content: `Según nuestros registros, tienes ${businessName}, un ${businessType} ubicado en ${businessLocation}. ¿Es correcta esta información? ✅`,
+          content: `Tienes ${businessName}, un ${businessType} ubicado en ${businessLocation}. ¿Es correcta esta información? ✅`,
           type: "received",
           timestamp: new Date(),
         },
@@ -82,11 +81,38 @@ const ChatInterface: React.FC = () => {
       ],
     },
     {
+      id: "points-explanation",
+      messages: [
+        {
+          id: "points-1",
+          content: "¡Excelente! Antes de comenzar, déjame explicarte sobre los puntos de resiliencia 🌟",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "points-2",
+          content: "Los puntos de resiliencia son una recompensa que ganarás por tomar acciones para proteger tu negocio. Con ellos podrás:",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "points-3",
+          content: "✨ Desbloquear asesorías personalizadas\n🎓 Acceder a cursos premium\n💎 Obtener beneficios exclusivos del BCP\n🛡️ Conseguir escudos de explorador",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Entendido, continuar", value: "continue" },
+      ],
+    },
+    {
       id: "success-story",
       messages: [
         {
           id: "story-1",
-          content: "¡Perfecto! Antes de comenzar, me gustaría compartir contigo la historia de María, una emprendedora como tú. 📖",
+          content: "Ahora, me gustaría compartir contigo la historia de María, una emprendedora como tú que logró proteger su negocio. 📖",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
@@ -98,7 +124,8 @@ const ChatInterface: React.FC = () => {
         business: "Viñedos San Martín",
         location: "Ica",
         quote: "Gracias al plan de contingencia que armé con Kututu, pude proteger mi bodega y mis barricas durante el último sismo. ¡Ahora mi negocio está más seguro que nunca!",
-        imageSrc: "https://randomuser.me/api/portraits/women/42.jpg"
+        imageSrc: "https://randomuser.me/api/portraits/women/42.jpg",
+        rewardPoints: 15
       },
       quickReplies: [
         { label: "Continuar", value: "continue" },
@@ -118,11 +145,10 @@ const ChatInterface: React.FC = () => {
           id: "awareness-2",
           content: "¡Pero no te preocupes! Estoy aquí para ayudarte a preparar tu bodega y hacerla más resistente 💪",
           type: "received",
-          timestamp: new Date(),
         },
         {
           id: "awareness-3",
-          content: "¿Te animas a crear tu plan de contingencia?",
+          content: "¿Te animas a crear tu perfil de riesgo?",
           type: "received",
           timestamp: new Date(),
         },
@@ -314,7 +340,7 @@ const ChatInterface: React.FC = () => {
       component: "risk",
       componentProps: {
         level: "medium",
-        message: "Tu bodega tiene un nivel medio de vulnerabilidad. Con algunas medidas adicionales, podrías reducir significativamente los riesgos.",
+        message: "Tu bodega tiene un nivel medio de vulnerabilidad. ¡Felicitaciones! Ahora perteneces al escudo Explorador Novato 🛡️",
         rewardPoints: 25,
         showMoreUrl: "#"
       },
@@ -380,6 +406,12 @@ const ChatInterface: React.FC = () => {
         {
           id: "courses-2",
           content: "Aquí tienes una ruta de aprendizaje personalizada para Bodega De Liz:",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "courses-3",
+          content: "Al completar los cursos, irás subiendo de nivel y obtendrás nuevos escudos de explorador. 🛡️",
           type: "received",
           timestamp: new Date(),
         },
@@ -495,7 +527,13 @@ const ChatInterface: React.FC = () => {
         },
         {
           id: "alert-3",
-          content: "Recuerda aplicar lo aprendido en el curso: prioriza tu seguridad y la de tu equipo, asegura la documentación importante y verifica tus sistemas de drenaje. 🛡️",
+          content: "Más detalles en: https://www.senamhi.gob.pe/alertas",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "alert-4",
+          content: "Recuerda: tu seguridad y la de tu equipo es lo primero. Aplica lo aprendido: asegura documentos y verifica sistemas de drenaje. 🛡️",
           type: "received",
           timestamp: new Date(),
         },
@@ -523,21 +561,42 @@ const ChatInterface: React.FC = () => {
       id: "damage-assessment",
       messages: [
         {
-          id: "damage-1",
-          content: "Me alegra saber que están bien. 😊",
+          id: "assessment-1",
+          content: "Necesito evaluar los posibles daños. Por favor, responde estas preguntas:",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
-          id: "damage-2",
-          content: "Ahora necesitamos evaluar si hubo daños en tu bodega. Por favor, cuéntame si observaste alguna de estas situaciones:",
+          id: "assessment-2",
+          content: "1. ¿Hay filtraciones en el techo o paredes?\n2. ¿Los sistemas de drenaje funcionaron correctamente?\n3. ¿Las barricas y botellas están a salvo?\n4. ¿Hay señales de humedad en el área de almacenamiento?\n5. ¿Los equipos eléctricos están funcionando normalmente?",
           type: "received",
           timestamp: new Date(),
         },
       ],
       quickReplies: [
-        { label: "Hay filtraciones en el techo", value: "roof-damage" },
+        { label: "Solo filtraciones menores en el techo", value: "minor-damage" },
+      ],
+    },
+    {
+      id: "community-support",
+      messages: [
+        {
+          id: "support-1",
+          content: "Entiendo. Los daños son menores, pero otros emprendedores de Barranca han sufrido pérdidas significativas. 💔",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "support-2",
+          content: "¿Te gustaría conectar con ellos para brindar apoyo? Juntos somos más fuertes. 🤝",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, quiero ayudar", value: "help-others" },
       ],
     },
     {
@@ -888,7 +947,7 @@ const ChatInterface: React.FC = () => {
             id: `course-msg-2-${Date.now()}`,
             content: "¡Vamos a comenzar con el aprendizaje! Este curso te ayudará a desarrollar habilidades clave para la gestión de riesgos en tu bodega.",
             type: "received",
-            timestamp: new Date(),
+          timestamp: new Date(),
           }
         ],
         quickReplies: [
@@ -904,165 +963,4 @@ const ChatInterface: React.FC = () => {
     switch (component) {
       case "progress":
         return (
-          <div className="bg-white rounded-lg p-4 my-2 shadow-sm">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">
-              Nivel de preparación
-            </h4>
-            <div className="w-full h-3 bg-gray-200 rounded-full">
-              <div 
-                className="h-full bg-whatsapp-green rounded-full transition-all duration-1000"
-                style={{ width: `${props.progress}%` }}
-              ></div>
-            </div>
-            <div className="flex justify-between mt-1">
-              <span className="text-xs text-gray-500">{props.level}</span>
-              <span className="text-xs font-medium text-gray-700">{props.progress}%</span>
-              <span className="text-xs text-gray-500">→ {props.nextLevel}</span>
-            </div>
-          </div>
-        );
-      
-      case "risk":
-        return <RiskIndicator 
-          level={props.level} 
-          message={props.message}
-          className="my-2"
-          rewardPoints={props.rewardPoints}
-          showMoreUrl={props.showMoreUrl}
-        />;
-      
-      case "roadmap":
-        return props && <CoursesRoadmap 
-          courses={props} 
-          onSelectCourse={handleSelectCourse}
-          className="my-2" 
-        />;
-      
-      case "reward":
-        return (
-          <div className="bg-gradient-to-br from-whatsapp-green to-green-400 rounded-lg p-4 my-2 text-white text-center">
-            <h4 className="font-medium mb-3">{props.achievement}</h4>
-            <div className="inline-flex items-center justify-center bg-white rounded-full px-4 py-2 shadow-lg">
-              <CuyCoins count={props.coins} showAnimation size="lg" />
-            </div>
-            <p className="mt-2 text-sm">¡Puntos de resiliencia añadidos a tu cuenta!</p>
-          </div>
-        );
-
-      case "testimonial":
-        return props && <TestimonialCard 
-          name={props.name}
-          business={props.business}
-          location={props.location}
-          quote={props.quote}
-          imageSrc={props.imageSrc}
-          className="my-2"
-        />;
-      
-      default:
-        return null;
-    }
-  };
-
-  if (!started) {
-    return <WhatsAppList onStartChat={() => setStarted(true)} />;
-  }
-
-  return (
-    <div className="flex flex-col h-full bg-whatsapp-bg">
-      <div className="bg-whatsapp-green text-white px-4 py-3 flex items-center justify-between shadow-md">
-        <div className="flex items-center">
-          <ArrowLeft className="w-5 h-5 mr-3" onClick={() => setStarted(false)} />
-          <CuyAvatar />
-          <div className="ml-2">
-            <div className="font-medium">Kututu BCP</div>
-            <div className="text-xs opacity-80">
-              {loading ? "escribiendo..." : "en línea"}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center space-x-4">
-          {cuyCoins > 0 && (
-            <div className={cn(
-              "transition-all duration-300",
-              showReward && "scale-125"
-            )}>
-              <CuyCoins count={cuyCoins} />
-            </div>
-          )}
-          <MoreVertical className="w-5 h-5" />
-        </div>
-      </div>
-
-      <div className="flex-1 overflow-y-auto p-4 bg-chat-pattern">
-        {sections.map((section, sectionIndex) => (
-          <div key={section.id} className="mb-4">
-            {section.messages.map((message) => (
-              <ChatMessage key={message.id} {...message} />
-            ))}
-
-            {section.component && section.componentProps && (
-              renderComponent(section.component, section.componentProps)
-            )}
-
-            {section.quickReplies && (
-              <QuickReply
-                options={section.quickReplies}
-                onSelect={handleQuickReply}
-                className="mt-1"
-              />
-            )}
-          </div>
-        ))}
-
-        {loading && (
-          <ChatMessage
-            id="typing"
-            content=""
-            type="received"
-            timestamp={new Date()}
-            isTyping={true}
-          />
-        )}
-
-        <div ref={messagesEndRef} />
-      </div>
-
-      <div className="bg-gray-100 p-2 px-4 flex items-center border-t border-gray-200">
-        <button className="text-gray-500 mr-2">
-          <Paperclip className="w-5 h-5" />
-        </button>
-        
-        <input
-          type="text"
-          value={currentMessage}
-          onChange={(e) => setCurrentMessage(e.target.value)}
-          placeholder={
-            verifyingPin 
-              ? "Ingresa el PIN del desafío..." 
-              : waitingForReadyConfirmation 
-                ? "Escribe 'Estoy listo' cuando quieras continuar..." 
-                : `Escribe un mensaje, ${userName}...`
-          }
-          className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:border-whatsapp-green bg-white text-gray-800"
-          onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-        />
-        
-        {currentMessage ? (
-          <button
-            className="ml-2 bg-whatsapp-green rounded-full p-2 text-white"
-            onClick={handleSendMessage}
-          >
-            <Send className="w-5 h-5" />
-          </button>
-        ) : (
-          <button className="ml-2 text-gray-500">
-            <Mic className="w-5 h-5" />
-          </button>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default ChatInterface;
+          <
