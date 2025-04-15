@@ -77,6 +77,8 @@ export default {
 					'light-green': '#DCF8C6',
 					'bg': '#E5DDD5',
 					'blue': '#34B7F1',
+					'header': '#075E54',
+					'input-bg': '#f0f0f0',
 				}
 			},
 			backgroundImage: {
