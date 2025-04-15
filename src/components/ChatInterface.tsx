@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import ChatMessage, { ChatMessageProps } from "./ChatMessage";
@@ -971,3 +972,209 @@ const ChatInterface: React.FC = () => {
             showAvatar: true,
           },
           {
+            id: `course-msg-2-${Date.now()}`,
+            content: `Este curso te ayudará a entender mejor cómo proteger los aspectos más importantes de tu negocio. ¿Estás listo/a para comenzar?`,
+            type: "received",
+            timestamp: new Date(),
+          }
+        ],
+        quickReplies: [
+          { label: "¡Listo para comenzar!", value: "start-now" }
+        ]
+      };
+      
+      setSections(prev => [...prev, courseSection]);
+      setWaitingForReadyConfirmation(true);
+    }
+  };
+
+  const handleStartChat = () => {
+    setStarted(true);
+    setCuyCoins(0); 
+    setSections([]);
+    setCurrentSectionIndex(0);
+  };
+
+  const renderChatMessages = () => {
+    return sections.flatMap(section => 
+      section.messages.map((message) => (
+        <ChatMessage
+          key={message.id}
+          content={message.content}
+          type={message.type}
+          timestamp={message.timestamp}
+          showAvatar={message.showAvatar}
+          isPin={message.isPin}
+        />
+      ))
+    );
+  };
+
+  const renderCurrentSection = () => {
+    const currentSection = sections[sections.length - 1];
+    
+    if (!currentSection) return null;
+    
+    return (
+      <>
+        {currentSection.component === "risk" && (
+          <div className="py-4">
+            <RiskIndicator 
+              level={currentSection.componentProps.level}
+              message={currentSection.componentProps.message}
+              showMoreUrl={currentSection.componentProps.showMoreUrl}
+              rewardPoints={currentSection.componentProps.rewardPoints}
+            />
+          </div>
+        )}
+        
+        {currentSection.component === "progress" && (
+          <div className="py-4">
+            <ProgressIndicator 
+              value={currentSection.componentProps.value}
+              total={currentSection.componentProps.total}
+              label={currentSection.componentProps.label}
+            />
+          </div>
+        )}
+        
+        {currentSection.component === "testimonial" && (
+          <div className="py-4">
+            <TestimonialCard 
+              name={currentSection.componentProps.name}
+              business={currentSection.componentProps.business}
+              location={currentSection.componentProps.location}
+              quote={currentSection.componentProps.quote}
+              imageSrc={currentSection.componentProps.imageSrc}
+              rewardPoints={currentSection.componentProps.rewardPoints}
+            />
+          </div>
+        )}
+        
+        {currentSection.component === "roadmap" && (
+          <div className="py-4">
+            <CoursesRoadmap 
+              courses={currentSection.componentProps}
+              onSelectCourse={handleSelectCourse}
+            />
+          </div>
+        )}
+        
+        {currentSection.component === "reward" && (
+          <div className="py-4 flex flex-col items-center">
+            <h3 className="text-lg font-medium text-green-700 mb-2">{currentSection.componentProps.achievement}</h3>
+            <div className="flex items-center gap-2">
+              <span>Ganaste:</span>
+              <CuyCoins count={currentSection.componentProps.coins} />
+            </div>
+          </div>
+        )}
+        
+        {currentSection.quickReplies && currentSection.quickReplies.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-4">
+            {currentSection.quickReplies.map(option => (
+              <QuickReply
+                key={option.value}
+                label={option.label}
+                onClick={() => handleQuickReply(option.value)}
+              />
+            ))}
+          </div>
+        )}
+      </>
+    );
+  };
+
+  // WhatsApp-like interface
+  if (!started) {
+    return (
+      <div className="flex flex-col h-full">
+        <div className="bg-bcp-blue text-white p-4 flex items-center">
+          <ArrowLeft className="w-6 h-6 mr-4" />
+          <div>
+            <h3 className="font-medium">Kututu BCP</h3>
+            <p className="text-xs">Asistente virtual</p>
+          </div>
+        </div>
+        <div className="flex-1 bg-gray-100 p-4 overflow-y-auto">
+          <WhatsAppList 
+            title="Kututu BCP"
+            subtitle="Tu asesor virtual"
+            message="¡Hola! Soy Kututu, tu asesor BCP 👋"
+            time="12:30"
+            unread={1}
+            onClick={handleStartChat}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Chat interface
+  return (
+    <div className="flex flex-col h-full">
+      <div className="bg-bcp-blue text-white p-4 flex items-center justify-between">
+        <div className="flex items-center">
+          <ArrowLeft 
+            className="w-6 h-6 mr-4 cursor-pointer" 
+            onClick={() => {
+              setStarted(false);
+              setSections([]);
+              setCurrentSectionIndex(0);
+            }}
+          />
+          <div className="flex items-center">
+            <CuyAvatar size="sm" className="mr-3" />
+            <div>
+              <h3 className="font-medium">Kututu BCP</h3>
+              <p className="text-xs">En línea</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <CuyCoins count={cuyCoins} className={cn("transition-all", showReward ? "scale-125" : "")} />
+          <MoreVertical className="w-6 h-6" />
+        </div>
+      </div>
+      
+      <div className="flex-1 bg-chat-pattern bg-opacity-10 p-4 overflow-y-auto">
+        <div className="space-y-4">
+          {renderChatMessages()}
+          {renderCurrentSection()}
+          {loading && (
+            <div className="flex space-x-2 p-3 bg-gray-200 rounded-lg items-center w-24">
+              <div className="bg-gray-500 rounded-full h-2 w-2 animate-bounce"></div>
+              <div className="bg-gray-500 rounded-full h-2 w-2 animate-bounce delay-100"></div>
+              <div className="bg-gray-500 rounded-full h-2 w-2 animate-bounce delay-200"></div>
+            </div>
+          )}
+          <div ref={messagesEndRef}></div>
+        </div>
+      </div>
+      
+      <div className="bg-white p-3 border-t">
+        <div className="flex items-center gap-2">
+          <div className="flex-1 bg-gray-100 rounded-full flex items-center px-4 py-2">
+            <input
+              type="text"
+              placeholder="Escribe un mensaje..."
+              className="flex-1 bg-transparent outline-none"
+              value={currentMessage}
+              onChange={(e) => setCurrentMessage(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+            />
+            <Paperclip className="w-5 h-5 text-gray-500 ml-2" />
+          </div>
+          <button
+            onClick={handleSendMessage}
+            className="bg-bcp-blue text-white p-2 rounded-full"
+          >
+            {currentMessage ? <Send className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ChatInterface;
