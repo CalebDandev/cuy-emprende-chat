@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import ChatMessage, { ChatMessageProps } from "./ChatMessage";
@@ -48,253 +49,44 @@ const ChatInterface: React.FC = () => {
   
   const conversationFlow: ConversationSection[] = [
     {
-      id: "welcome-1",
+      id: "intro",
       messages: [
         {
-          id: "welcome-msg-1",
-          content: `¡Hola! Soy Kututu, tu asistente virtual del BCP. 👋`,
+          id: "intro-1",
+          content: `¡Hola ${userName}! Soy Kututu, tu asesor virtual de BCP 👋`,
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
-          id: "welcome-msg-2",
-          content: `Estoy aquí para ayudarte a proteger tu negocio ante posibles desastres naturales. 🛡️`,
+          id: "intro-2",
+          content: "Estoy aquí para ayudarte a crear un plan de contingencia para tu negocio de vinos y destilados, y así estar preparado ante cualquier emergencia que pueda afectar tu emprendimiento. 🛡️",
           type: "received",
           timestamp: new Date(),
         },
         {
-          id: "welcome-msg-3",
-          content: `¿Te gustaría evaluar el nivel de riesgo de tu negocio y descubrir cómo estar mejor preparado?`,
+          id: "intro-3",
+          content: "Si deseas conocer más sobre nuestras iniciativas para emprendedores, puedes visitar: https://www.viabcp.com",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "intro-4",
+          content: `Según nuestros registros, tienes ${businessName}, un ${businessType} ubicado en ${businessLocation}. ¿Es correcta esta información? ✅`,
           type: "received",
           timestamp: new Date(),
         },
       ],
       quickReplies: [
-        { label: "¡Empecemos!", value: "start" },
-        { label: "Más información", value: "info" },
+        { label: "Sí, es correcto", value: "correct" },
       ],
     },
     {
-      id: "info-1",
+      id: "success-story",
       messages: [
         {
-          id: "info-msg-1",
-          content: `Con esta herramienta podrás:`,
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "info-msg-2",
-          content: `• Identificar los riesgos específicos que enfrenta tu negocio. 🔍\n• Conocer las medidas preventivas que puedes implementar. 🛠️\n• Acceder a recursos y herramientas útiles para la gestión de riesgos. 📚`,
-          type: "received",
-          timestamp: new Date(),
-        },
-        {
-          id: "info-msg-3",
-          content: `¡Comencemos a proteger tu negocio hoy mismo!`,
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-      quickReplies: [
-        { label: "¡Empecemos!", value: "start" },
-      ],
-    },
-    {
-      id: "data-confirmation-1",
-      messages: [
-        {
-          id: "data-msg-1",
-          content: `Para empezar, por favor, verifica que la siguiente información de tu negocio sea correcta:`,
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "data-msg-2",
-          content: `• Nombre: ${userName}\n• Tipo de negocio: ${businessType}\n• Nombre del negocio: ${businessName}\n• Ubicación: ${businessLocation}`,
-          type: "received",
-          timestamp: new Date(),
-          isPin: true,
-        },
-      ],
-      quickReplies: [
-        { label: "Sí, es correcto", value: "correct-info" },
-        { label: "No, debo corregir", value: "incorrect-info" },
-      ],
-    },
-    {
-      id: "risk-assessment-1",
-      messages: [
-        {
-          id: "risk-msg-1",
-          content: `De acuerdo a la información proporcionada, hemos identificado que tu negocio tiene un nivel de riesgo ${riskLevel}.`,
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "risk-msg-2",
-          content: `Esto significa que tu negocio podría verse afectado por desastres naturales como lluvias intensas 🌧️, deslizamientos ⛰️ o inundaciones 🌊.`,
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-      component: "risk",
-      componentProps: {
-        level: riskLevel,
-        message: `Te recomendamos tomar medidas preventivas para proteger tu negocio y evitar pérdidas económicas.`,
-      },
-      quickReplies: [
-        { label: "Ver medidas preventivas", value: "preventive-measures" },
-        { label: "No estoy de acuerdo", value: "disagree" },
-      ],
-    },
-    {
-      id: "preventive-measures-1",
-      messages: [
-        {
-          id: "measures-msg-1",
-          content: `Para ayudarte a proteger tu negocio, te brindamos las siguientes recomendaciones:`,
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      component: "roadmap",
-      componentProps: [
-        {
-          id: "course-1",
-          title: "Elabora un plan de contingencia",
-          description: "Aprende a crear un plan para enfrentar emergencias y proteger tu negocio.",
-          status: "available",
-          progress: 75,
-          topics: [
-            "Identificación de riesgos",
-            "Establecimiento de prioridades",
-            "Asignación de recursos",
-          ],
-          benefits: [
-            "Reducción de pérdidas económicas",
-            "Continuidad del negocio",
-            "Protección de empleados y clientes",
-          ],
-          duration: "2 horas",
-          url: "https://www.google.com",
-        },
-        {
-          id: "course-2",
-          title: "Asegura tu negocio contra desastres",
-          description: "Descubre los seguros que te ayudarán a proteger tu patrimonio en caso de emergencias.",
-          status: "available",
-          unlockCost: 50,
-          topics: [
-            "Tipos de seguros",
-            "Coberturas",
-            "Costos",
-          ],
-          benefits: [
-            "Protección financiera",
-            "Tranquilidad",
-            "Recuperación rápida",
-          ],
-          duration: "1.5 horas",
-          url: "https://www.youtube.com",
-        },
-        {
-          id: "course-3",
-          title: "Invierte en infraestructura resiliente",
-          description: "Conoce las mejoras que puedes realizar en tu local para hacerlo más resistente a los desastres.",
-          status: "locked",
-          unlockCost: 75,
-          topics: [
-            "Reforzamiento estructural",
-            "Sistemas de alerta temprana",
-            "Ubicación segura",
-          ],
-          benefits: [
-            "Mayor seguridad",
-            "Menor riesgo de daños",
-            "Aumento del valor del inmueble",
-          ],
-          duration: "3 horas",
-          url: "https://www.facebook.com",
-        },
-      ],
-      quickReplies: [
-        { label: "Quiero saber más", value: "more-info" },
-        { label: "Ya estoy preparado", value: "ready" },
-      ],
-    },
-    {
-      id: "ready-confirmation-1",
-      messages: [
-        {
-          id: "ready-msg-1",
-          content: `¡Excelente! Me alegra saber que estás preparado. Para confirmar que has tomado las medidas necesarias, necesito que ingreses el código de seguridad que te enviamos por SMS.`,
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "ready-msg-2",
-          content: `Por favor, ingresa el código de 4 dígitos:`,
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-    },
-    {
-      id: "damage-assessment-1",
-      messages: [
-        {
-          id: "damage-msg-1",
-          content: `Lamentablemente, hemos detectado que tu negocio ha sido afectado por las recientes lluvias. 🌧️`,
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-        {
-          id: "damage-msg-2",
-          content: `¿Te gustaría que te ayudemos a evaluar los daños y acceder a los recursos disponibles?`,
-          type: "received",
-          timestamp: new Date(),
-        },
-      ],
-      quickReplies: [
-        { label: "Sí, necesito ayuda", value: "need-help" },
-        { label: "No, gracias", value: "no-help" },
-      ],
-    },
-    {
-      id: "reward-1",
-      messages: [
-        {
-          id: "reward-msg-1",
-          content: `¡Felicitaciones! 🎉 Has completado el proceso de evaluación de riesgos y has tomado medidas para proteger tu negocio.`,
-          type: "received",
-          timestamp: new Date(),
-          showAvatar: true,
-        },
-      ],
-      component: "reward",
-      componentProps: {
-        achievement: "¡Negocio resiliente!",
-        coins: 100,
-      },
-      quickReplies: [
-        { label: "Ver mi puntaje", value: "view-score" },
-        { label: "Compartir", value: "share" },
-      ],
-    },
-    {
-      id: "testimonial-1",
-      messages: [
-        {
-          id: "testimonial-msg-1",
-          content: `Nos encanta saber que estás protegiendo tu negocio. ¿Te gustaría compartir tu experiencia con otros emprendedores?`,
+          id: "story-1",
+          content: "¡Perfecto! Antes de comenzar, me gustaría compartir contigo la historia de María, una emprendedora como tú. 📖",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
@@ -302,38 +94,560 @@ const ChatInterface: React.FC = () => {
       ],
       component: "testimonial",
       componentProps: {
-        name: "Lizet Rojas Corman",
-        business: "Bodega De Liz",
-        location: "Barranca, Lima",
-        quote: "Gracias a Kututu, ahora me siento más segura y preparada para enfrentar cualquier emergencia.",
-        imageSrc: "https://images.unsplash.com/photo-1552058544-f2b08422aa96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cGVvcGxlfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+        name: "María Sánchez",
+        business: "Viñedos San Martín",
+        location: "Ica",
+        quote: "Gracias al plan de contingencia que armé con Kututu, pude proteger mi bodega y mis barricas durante el último sismo. ¡Ahora mi negocio está más seguro que nunca!",
+        imageSrc: "https://randomuser.me/api/portraits/women/42.jpg"
       },
       quickReplies: [
-        { label: "Compartir mi experiencia", value: "share-experience" },
-        { label: "No, gracias", value: "no-share" },
+        { label: "Continuar", value: "continue" },
       ],
     },
     {
-      id: "final-1",
+      id: "awareness",
       messages: [
         {
-          id: "final-msg-1",
-          content: `¡Gracias por confiar en Kututu! 😊`,
+          id: "awareness-1",
+          content: "¿Sabías que el 40% de las bodegas de vino no logra recuperarse tras un desastre natural? 😱",
           type: "received",
           timestamp: new Date(),
           showAvatar: true,
         },
         {
-          id: "final-msg-2",
-          content: `Esperamos que esta herramienta te sea de gran utilidad para proteger tu negocio. ¡Hasta la próxima!`,
+          id: "awareness-2",
+          content: "¡Pero no te preocupes! Estoy aquí para ayudarte a preparar tu bodega y hacerla más resistente 💪",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "awareness-3",
+          content: "¿Te animas a crear tu plan de contingencia?",
           type: "received",
           timestamp: new Date(),
         },
       ],
       quickReplies: [
-        { label: "Volver a empezar", value: "restart" },
+        { label: "¡Claro que sí! 🚀", value: "ready" },
       ],
     },
+    {
+      id: "question-employees",
+      messages: [
+        {
+          id: "employees-1",
+          content: "¡Excelente decisión! 👏 Para crear un plan efectivo, necesito hacerte algunas preguntas sobre tu negocio.",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "employees-2",
+          content: "¿Cuántos empleados trabajan contigo en Bodega De Liz?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Solo yo", value: "solo" },
+        { label: "2-5 empleados", value: "small" },
+        { label: "6-10 empleados", value: "medium" },
+        { label: "Más de 10", value: "large" },
+      ],
+    },
+    {
+      id: "question-risk-assessment",
+      messages: [
+        {
+          id: "risk-1",
+          content: "¡Entendido! 📝 Ahora, sobre los riesgos que podrían afectar tu negocio...",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "risk-2",
+          content: "¿Cuál consideras que es el mayor riesgo para tu bodega de vinos?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sismos o terremotos", value: "earthquake" },
+        { label: "Inundaciones", value: "flood" },
+        { label: "Incendios", value: "fire" },
+        { label: "Cortes de energía", value: "power" },
+      ],
+    },
+    {
+      id: "question-equipment",
+      messages: [
+        {
+          id: "equipment-1",
+          content: "Es importante estar preparado para esos eventos. 🔍",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "equipment-2",
+          content: "¿Cuentas con algún equipo o sistema para mitigar daños en caso de emergencia?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, tengo extintores y botiquín", value: "basic" },
+        { label: "Solo tengo lo básico", value: "very-basic" },
+        { label: "No tengo nada aún", value: "none" },
+      ],
+    },
+    {
+      id: "question-insurance",
+      messages: [
+        {
+          id: "insurance-1",
+          content: "Gracias por la información. 📊",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "insurance-2",
+          content: "¿Tienes algún seguro que cubra a tu negocio en caso de emergencias?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, tengo seguro completo", value: "full-insurance" },
+        { label: "Solo seguro básico", value: "basic-insurance" },
+        { label: "No tengo seguros", value: "no-insurance" },
+      ],
+    },
+    {
+      id: "question-backup",
+      messages: [
+        {
+          id: "backup-1",
+          content: "Entendido. Continúo evaluando tu nivel de preparación. 🧮",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "backup-2",
+          content: "¿Tienes copias de seguridad de la información importante de tu negocio (recetas, clientes, proveedores)?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, en digital y físico", value: "full-backup" },
+        { label: "Solo copias físicas", value: "physical-backup" },
+        { label: "No tengo copias", value: "no-backup" },
+      ],
+    },
+    {
+      id: "question-emergency-plan",
+      messages: [
+        {
+          id: "plan-1",
+          content: "Vamos avanzando bien. 👍",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "plan-2",
+          content: "¿Has establecido un plan de evacuación y puntos de encuentro con tu equipo en caso de emergencia?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, está implementado", value: "implemented" },
+        { label: "Lo tengo pensado pero no formalizado", value: "planned" },
+        { label: "No he pensado en eso", value: "none" },
+      ],
+    },
+    {
+      id: "question-supply",
+      messages: [
+        {
+          id: "supply-1",
+          content: "Una pregunta más para completar tu evaluación. 📋",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "supply-2",
+          content: "¿Cuentas con proveedores alternativos en caso de que tus proveedores habituales se vean afectados por una emergencia?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, tengo opciones identificadas", value: "alternatives" },
+        { label: "Solo para algunos insumos", value: "partial" },
+        { label: "No, dependo de mis proveedores actuales", value: "dependent" },
+      ],
+    },
+    {
+      id: "risk-evaluation",
+      messages: [
+        {
+          id: "evaluation-1",
+          content: "Gracias por toda la información, Lizet. ⚙️",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "evaluation-2",
+          content: "Estoy evaluando tu perfil de riesgo actual para Bodega De Liz...",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      component: "risk",
+      componentProps: {
+        level: "medium",
+        message: "Tu bodega tiene un nivel medio de vulnerabilidad. Con algunas medidas adicionales, podrías reducir significativamente los riesgos.",
+        rewardPoints: 25,
+        showMoreUrl: "#"
+      },
+      quickReplies: [
+        { label: "Ver medidas rápidas recomendadas", value: "see-plan" },
+      ],
+    },
+    {
+      id: "contingency-plan",
+      messages: [
+        {
+          id: "plan-1",
+          content: "He creado recomendaciones específicas para Bodega De Liz: 📋",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "plan-2",
+          content: "1️⃣ **Protección de barricas**: Instala soportes antisísmicos para tus barricas y estanterías, reduciendo el riesgo de caídas.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "plan-3",
+          content: "2️⃣ **Sistema de respaldo energético**: Adquiere un generador para mantener la temperatura controlada en caso de cortes de energía.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "plan-4",
+          content: "3️⃣ **Plan de evacuación**: Establece y practica con tu equipo rutas de evacuación seguras, designando zonas de encuentro.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "plan-5",
+          content: "4️⃣ **Digitalización de registros**: Mantén copias digitales de tus fórmulas, procesos y registros de inventario en la nube.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "plan-6",
+          content: "¿Te gustaría conocer los cursos disponibles para implementar mejor este plan? 🎓",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Ver cursos recomendados", value: "courses" },
+      ],
+    },
+    {
+      id: "courses-roadmap",
+      messages: [
+        {
+          id: "courses-1",
+          content: "¡Excelente decisión! La formación continua fortalecerá tu negocio. 📚",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "courses-2",
+          content: "Aquí tienes una ruta de aprendizaje personalizada para Bodega De Liz:",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      component: "roadmap",
+      componentProps: [
+        {
+          id: "course-1",
+          title: "Conoce los procesos claves de tu negocio",
+          description: "Fundamentos básicos para identificar y asegurar los procesos críticos de tu bodega",
+          status: "available",
+          progress: 0,
+          topics: [
+            "Identificación de procesos críticos en tu bodega",
+            "Cómo priorizar actividades en caso de emergencia",
+            "Evaluación de impacto en la cadena de valor"
+          ],
+          benefits: [
+            "Minimizar interrupciones en tu operación",
+            "Proteger tus activos más valiosos",
+            "Recuperar rápidamente la operatividad"
+          ],
+          duration: "45 minutos",
+          url: "#curso-1"
+        },
+        {
+          id: "course-2",
+          title: "Protege lo más importante",
+          description: "Aprende a proteger tus productos y equipos especializados",
+          status: "locked",
+          unlockCost: 50
+        },
+        {
+          id: "course-3",
+          title: "Crea un fondo de emergencia",
+          description: "Estrategias financieras para asegurar la continuidad de tu bodega",
+          status: "locked",
+          unlockCost: 75
+        },
+        {
+          id: "course-4",
+          title: "Digitaliza tu información importante",
+          description: "Respaldo digital seguro para tus datos críticos",
+          status: "locked",
+          unlockCost: 40
+        },
+        {
+          id: "course-5",
+          title: "Prepara un plan de comunicación en emergencias",
+          description: "Mantén informados a clientes, proveedores y colaboradores",
+          status: "locked",
+          unlockCost: 60
+        },
+        {
+          id: "course-6",
+          title: "Planifica cómo continuar operando y reabastecerte",
+          description: "Estrategias para la recuperación rápida post-emergencia",
+          status: "locked",
+          unlockCost: 80
+        }
+      ],
+      quickReplies: [
+        { label: "Comenzar primer curso", value: "start-course" },
+      ],
+    },
+    {
+      id: "course-completion",
+      messages: [
+        {
+          id: "completion-1",
+          content: "¡Felicidades, Lizet! 🎉 Has completado exitosamente el curso 'Conoce los procesos claves de tu negocio'.",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "completion-2",
+          content: "Has ganado 30 puntos de resiliencia que ya fueron acreditados a tu cuenta.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "completion-3",
+          content: "¿Te gustaría continuar con el siguiente módulo: 'Protege lo más importante'?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      component: "reward",
+      componentProps: {
+        achievement: "¡Curso completado!",
+        coins: 30
+      },
+      quickReplies: [
+        { label: "En otro momento", value: "later" },
+      ],
+    },
+    {
+      id: "emergency-alert",
+      messages: [
+        {
+          id: "alert-1",
+          content: "⚠️ ALERTA DE EMERGENCIA ⚠️",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "alert-2",
+          content: "Lizet, el SENAMHI ha emitido una alerta de lluvias intensas para la zona de Barranca en las próximas 48 horas. Se esperan precipitaciones de hasta 30mm. 🌧️",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "alert-3",
+          content: "Recuerda aplicar lo aprendido en el curso: prioriza tu seguridad y la de tu equipo, asegura la documentación importante y verifica tus sistemas de drenaje. 🛡️",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Gracias por el aviso", value: "thanks-alert" },
+      ],
+    },
+    {
+      id: "emergency-followup",
+      messages: [
+        {
+          id: "followup-1",
+          content: "Lizet, han pasado 24 horas desde la alerta. ¿Cómo estás? ¿Todo bien con tu familia y equipo? 🙏",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+      ],
+      quickReplies: [
+        { label: "Estamos todos bien, gracias", value: "all-good" },
+      ],
+    },
+    {
+      id: "damage-assessment",
+      messages: [
+        {
+          id: "damage-1",
+          content: "Me alegra saber que están bien. 😊",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "damage-2",
+          content: "Ahora necesitamos evaluar si hubo daños en tu bodega. Por favor, cuéntame si observaste alguna de estas situaciones:",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Hay filtraciones en el techo", value: "roof-damage" },
+      ],
+    },
+    {
+      id: "damage-details",
+      messages: [
+        {
+          id: "details-1",
+          content: "Entiendo. Las filtraciones pueden dañar tanto la estructura como tu producto. 📋",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "details-2",
+          content: "¿Pudiste proteger tus barricas y botellas del agua?",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Sí, las cubrí a tiempo", value: "protected" },
+      ],
+    },
+    {
+      id: "final-assessment",
+      messages: [
+        {
+          id: "final-1",
+          content: "¡Excelente trabajo aplicando lo aprendido! 👍",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "final-2",
+          content: "Basado en tu información, el daño es principalmente estructural pero has logrado proteger tu producto. Te recomendaría:",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "final-3",
+          content: "1️⃣ Contactar a un técnico para revisar y reparar las filtraciones\n2️⃣ Verificar si hay humedad en las paredes\n3️⃣ Instalar un deshumidificador temporalmente",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "final-4",
+          content: "Te estamos conectando con un voluntario de BCP que te brindará asesoría sobre cómo gestionar la reparación. Te contactará en las próximas 2 horas. 🤝",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Gracias por la ayuda", value: "thanks-help" },
+      ],
+    },
+    {
+      id: "market-info",
+      messages: [
+        {
+          id: "market-1",
+          content: "¡Con gusto, Lizet! 💪",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "market-2",
+          content: "Si en el futuro tuvieras pérdidas significativas en tus productos, recuerda que puedes acceder al Mercado Solidario de BCP, donde podrás recibir apoyo para recuperar tu inventario.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "market-3",
+          content: "Para más información, visita: www.mercadosolidariobcp.pe",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Finalizar conversación", value: "end" },
+      ],
+    },
+    {
+      id: "closing",
+      messages: [
+        {
+          id: "closing-1",
+          content: "Ha sido un gusto asistirte, Lizet. 😊 Estoy aquí para apoyarte en el camino hacia un negocio más resiliente.",
+          type: "received",
+          timestamp: new Date(),
+          showAvatar: true,
+        },
+        {
+          id: "closing-2",
+          content: "Recuerda que puedes volver a consultarme cuando lo necesites para revisar tu plan de contingencia o acceder a nuevos cursos.",
+          type: "received",
+          timestamp: new Date(),
+        },
+        {
+          id: "closing-3",
+          content: "¡Te deseo mucho éxito con Bodega De Liz! 🍷",
+          type: "received",
+          timestamp: new Date(),
+        },
+      ],
+      quickReplies: [
+        { label: "Finalizar conversación", value: "end" },
+      ],
+    }
   ];
 
   useEffect(() => {
@@ -347,10 +661,30 @@ const ChatInterface: React.FC = () => {
   }, [sections]);
 
   const displayCurrentSection = () => {
-    const section = conversationFlow[currentSectionIndex];
-    if (section) {
-      setSections(prev => [...prev, section]);
-    }
+    const currentSection = conversationFlow[currentSectionIndex];
+    setLoading(true);
+    
+    setTimeout(() => {
+      setSections(prev => [...prev, currentSection]);
+      setLoading(false);
+      scrollToBottom();
+      
+      if (currentSection.component === "reward" && currentSection.componentProps?.coins) {
+        setCuyCoins(prev => prev + currentSection.componentProps.coins);
+        setShowReward(true);
+        setTimeout(() => setShowReward(false), 3000);
+      }
+
+      if (currentSection.component === "risk" && currentSection.componentProps?.rewardPoints) {
+        setCuyCoins(prev => prev + currentSection.componentProps.rewardPoints);
+        setShowReward(true);
+        setTimeout(() => setShowReward(false), 3000);
+      }
+
+      if (currentSection.component === "risk" && currentSection.componentProps?.level) {
+        setRiskLevel(currentSection.componentProps.level);
+      }
+    }, 1000);
   };
 
   const scrollToBottom = () => {
@@ -358,119 +692,175 @@ const ChatInterface: React.FC = () => {
   };
 
   const handleSendMessage = () => {
-    if (waitingForReadyConfirmation) {
-      if (currentMessage === expectedPin) {
-        setSections(prev => [...prev, {
-          id: `pin-confirmation-${Date.now()}`,
-          messages: [
-            {
-              id: `pin-msg-1-${Date.now()}`,
-              content: `¡Código correcto! Gracias por confirmar tu identidad.`,
-              type: "received",
-              timestamp: new Date(),
-              showAvatar: true,
-            },
-          ],
-        }]);
-        setCuyCoins(prev => prev + 50);
-        setShowReward(true);
-        setTimeout(() => {
-          setShowReward(false);
-        }, 3000);
-        setCurrentSectionIndex(conversationFlow.findIndex(section => section.id === "reward-1"));
-        setWaitingForReadyConfirmation(false);
-      } else {
-        setSections(prev => [...prev, {
-          id: `pin-error-${Date.now()}`,
-          messages: [
-            {
-              id: `pin-msg-1-${Date.now()}`,
-              content: `Código incorrecto. Por favor, inténtalo de nuevo.`,
-              type: "received",
-              timestamp: new Date(),
-              showAvatar: true,
-            },
-          ],
-        }]);
-      }
+    if (!currentMessage.trim()) return;
+
+    if (verifyingPin) {
+      const enteredPin = currentMessage.trim();
+      
+      const newMessage: ChatMessageProps = {
+        id: `user-${Date.now()}`,
+        content: enteredPin,
+        type: "sent",
+        timestamp: new Date(),
+        isPin: true,
+      };
+
+      setSections(prev => {
+        const updated = [...prev];
+        if (updated.length > 0) {
+          updated[updated.length - 1] = {
+            ...updated[updated.length - 1],
+            messages: [...updated[updated.length - 1].messages, newMessage],
+          };
+        }
+        return updated;
+      });
+
       setCurrentMessage("");
+      
+      if (enteredPin === expectedPin) {
+        setVerifyingPin(false);
+        setTimeout(() => {
+          setCurrentSectionIndex(currentSectionIndex + 1);
+        }, 500);
+      } else {
+        setVerifyingPin(false);
+        setTimeout(() => {
+          // Handle incorrect PIN
+          const incorrectPinSection: ConversationSection = {
+            id: `incorrect-pin-${Date.now()}`,
+            messages: [
+              {
+                id: `incorrect-pin-msg-${Date.now()}`,
+                content: "Lo siento, el PIN ingresado es incorrecto. Por favor, intenta nuevamente.",
+                type: "received",
+                timestamp: new Date(),
+                showAvatar: true,
+              }
+            ],
+            quickReplies: [
+              { label: "Intentar nuevamente", value: "retry" }
+            ]
+          };
+          setSections(prev => [...prev, incorrectPinSection]);
+        }, 500);
+      }
       return;
     }
 
-    setSections(prev => [...prev, {
-      id: `user-msg-${Date.now()}`,
-      messages: [
-        {
-          id: `user-msg-1-${Date.now()}`,
-          content: currentMessage,
-          type: "sent",
-          timestamp: new Date(),
-        },
-      ],
-    }]);
+    if (waitingForReadyConfirmation && currentMessage.toLowerCase().includes("listo")) {
+      const newMessage: ChatMessageProps = {
+        id: `user-${Date.now()}`,
+        content: currentMessage,
+        type: "sent",
+        timestamp: new Date(),
+      };
+
+      setSections(prev => {
+        const updated = [...prev];
+        if (updated.length > 0) {
+          updated[updated.length - 1] = {
+            ...updated[updated.length - 1],
+            messages: [...updated[updated.length - 1].messages, newMessage],
+          };
+        }
+        return updated;
+      });
+
+      setCurrentMessage("");
+      setWaitingForReadyConfirmation(false);
+      
+      setTimeout(() => {
+        setCurrentSectionIndex(currentSectionIndex + 1);
+      }, 500);
+      return;
+    }
+    
+    const newMessage: ChatMessageProps = {
+      id: `user-${Date.now()}`,
+      content: currentMessage,
+      type: "sent",
+      timestamp: new Date(),
+    };
+
+    setSections(prev => {
+      const updated = [...prev];
+      if (updated.length > 0) {
+        updated[updated.length - 1] = {
+          ...updated[updated.length - 1],
+          messages: [...updated[updated.length - 1].messages, newMessage],
+        };
+      } else {
+        updated.push({
+          id: "user-input",
+          messages: [newMessage],
+        });
+      }
+      return updated;
+    });
+
     setCurrentMessage("");
+    
+    if (damageAssessment) {
+      setTimeout(() => {
+        setCurrentSectionIndex(currentSectionIndex + 1);
+      }, 500);
+      return;
+    }
   };
 
   const handleQuickReply = (value: string) => {
-    setSections(prev => [...prev, {
-      id: `quick-reply-${Date.now()}`,
-      messages: [
-        {
-          id: `quick-reply-msg-1-${Date.now()}`,
-          content: conversationFlow[currentSectionIndex].quickReplies?.find(reply => reply.value === value)?.label || value,
-          type: "sent",
-          timestamp: new Date(),
-        },
-      ],
-    }]);
+    const quickReplyOption = sections[sections.length - 1].quickReplies?.find(
+      option => option.value === value
+    );
 
-    if (value === "start") {
-      setCurrentSectionIndex(conversationFlow.findIndex(section => section.id === "data-confirmation-1"));
-    } else if (value === "info") {
-      setCurrentSectionIndex(conversationFlow.findIndex(section => section.id === "info-1"));
-    } else if (value === "correct-info") {
-      setCurrentSectionIndex(conversationFlow.findIndex(section => section.id === "risk-assessment-1"));
-    } else if (value === "incorrect-info") {
-      // TODO: Implement logic to correct info
-    } else if (value === "preventive-measures") {
-      setCurrentSectionIndex(conversationFlow.findIndex(section => section.id === "preventive-measures-1"));
-    } else if (value === "more-info") {
-      // TODO: Implement logic to show more info
-    } else if (value === "ready") {
-      const pin = Math.floor(1000 + Math.random() * 9000).toString();
-      setExpectedPin(pin);
-      setWaitingForReadyConfirmation(true);
-      setSections(prev => [...prev, {
-        id: `pin-request-${Date.now()}`,
-        messages: [
-          {
-            id: `pin-msg-1-${Date.now()}`,
-            content: `Te hemos enviado un código de seguridad por SMS. Por favor, ingresa el código para confirmar que estás preparado.`,
-            type: "received",
-            timestamp: new Date(),
-            showAvatar: true,
-          },
-        ],
-      }]);
-    } else if (value === "need-help") {
-      // TODO: Implement logic to help with damage assessment
-    } else if (value === "no-help") {
-      // TODO: Implement logic to continue without help
-    } else if (value === "view-score") {
-      // TODO: Implement logic to view score
-    } else if (value === "share") {
-      // TODO: Implement logic to share
-    } else if (value === "share-experience") {
-      // TODO: Implement logic to share experience
-    } else if (value === "no-share") {
-      // TODO: Implement logic to continue without sharing
-    } else if (value === "restart") {
-      setCurrentSectionIndex(0);
-      setSections([]);
-    } else if (value === "start-course") {
-      window.open(currentCourse, "_blank");
-    } else if (value === "back") {
-      setCurrentSectionIndex(conversationFlow.findIndex(section => section.id === "preventive-measures-1"));
+    if (quickReplyOption) {
+      const newMessage: ChatMessageProps = {
+        id: `quick-reply-${Date.now()}`,
+        content: quickReplyOption.label,
+        type: "sent",
+        timestamp: new Date(),
+      };
+
+      setSections(prev => {
+        const updated = [...prev];
+        if (updated.length > 0) {
+          updated[updated.length - 1] = {
+            ...updated[updated.length - 1],
+            messages: [...updated[updated.length - 1].messages, newMessage],
+            quickReplies: undefined,
+          };
+        }
+        return updated;
+      });
+
+      // If the user selects "end" in the closing section, go back to WhatsApp list
+      if (value === "end" && currentSectionIndex === conversationFlow.length - 1) {
+        setTimeout(() => {
+          setStarted(false);
+          setSections([]);
+          setCurrentSectionIndex(0);
+        }, 1000);
+        return;
+      }
+      
+      // Handle damage assessment specifically
+      if (value === "roof-damage" || value === "protected") {
+        setDamageAssessment(true);
+      }
+
+      // If user selects "start-course", show course completion directly
+      if (value === "start-course") {
+        setTimeout(() => {
+          // Show course completion after a delay to simulate completing the course
+          setCurrentSectionIndex(prev => prev + 1);
+        }, 2000);
+        return;
+      }
+
+      setTimeout(() => {
+        setCurrentSectionIndex(prev => prev + 1);
+      }, 500);
     }
   };
 
@@ -496,175 +886,181 @@ const ChatInterface: React.FC = () => {
           },
           {
             id: `course-msg-2-${Date.now()}`,
-            content: selectedCourse.description || "Descripción del curso no disponible.",
+            content: "¡Vamos a comenzar con el aprendizaje! Este curso te ayudará a desarrollar habilidades clave para la gestión de riesgos en tu bodega.",
             type: "received",
             timestamp: new Date(),
           }
         ],
         quickReplies: [
-          { label: "Comenzar curso", value: "start-course" },
-          { label: "Volver atrás", value: "back" }
+          { label: "Comenzar curso", value: "start-course" }
         ]
       };
-
+      
       setSections(prev => [...prev, courseSection]);
     }
   };
 
-  const handleStartChat = () => {
-    setStarted(true);
+  const renderComponent = (component: string, props: any) => {
+    switch (component) {
+      case "progress":
+        return (
+          <div className="bg-white rounded-lg p-4 my-2 shadow-sm">
+            <h4 className="text-sm font-medium text-gray-700 mb-2">
+              Nivel de preparación
+            </h4>
+            <div className="w-full h-3 bg-gray-200 rounded-full">
+              <div 
+                className="h-full bg-whatsapp-green rounded-full transition-all duration-1000"
+                style={{ width: `${props.progress}%` }}
+              ></div>
+            </div>
+            <div className="flex justify-between mt-1">
+              <span className="text-xs text-gray-500">{props.level}</span>
+              <span className="text-xs font-medium text-gray-700">{props.progress}%</span>
+              <span className="text-xs text-gray-500">→ {props.nextLevel}</span>
+            </div>
+          </div>
+        );
+      
+      case "risk":
+        return <RiskIndicator 
+          level={props.level} 
+          message={props.message}
+          className="my-2"
+          rewardPoints={props.rewardPoints}
+          showMoreUrl={props.showMoreUrl}
+        />;
+      
+      case "roadmap":
+        return props && <CoursesRoadmap 
+          courses={props} 
+          onSelectCourse={handleSelectCourse}
+          className="my-2" 
+        />;
+      
+      case "reward":
+        return (
+          <div className="bg-gradient-to-br from-whatsapp-green to-green-400 rounded-lg p-4 my-2 text-white text-center">
+            <h4 className="font-medium mb-3">{props.achievement}</h4>
+            <div className="inline-flex items-center justify-center bg-white rounded-full px-4 py-2 shadow-lg">
+              <CuyCoins count={props.coins} showAnimation size="lg" />
+            </div>
+            <p className="mt-2 text-sm">¡Puntos de resiliencia añadidos a tu cuenta!</p>
+          </div>
+        );
+
+      case "testimonial":
+        return props && <TestimonialCard 
+          name={props.name}
+          business={props.business}
+          location={props.location}
+          quote={props.quote}
+          imageSrc={props.imageSrc}
+          className="my-2"
+        />;
+      
+      default:
+        return null;
+    }
   };
 
+  if (!started) {
+    return <WhatsAppList onStartChat={() => setStarted(true)} />;
+  }
+
   return (
-    <div className="flex flex-col h-full bg-gray-100">
-      {!started ? (
-        <WhatsAppList onStartChat={handleStartChat} />
-      ) : (
-        <>
-          {/* Chat header */}
-          <div className="bg-whatsapp-green text-white p-3 flex items-center shadow-md">
-            <button onClick={() => setStarted(false)} className="mr-2">
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-            <CuyAvatar className="w-9 h-9" />
-            <div className="ml-3 flex-1">
-              <h2 className="font-semibold">Kututu BCP</h2>
-              <p className="text-xs opacity-90">Asistente virtual</p>
+    <div className="flex flex-col h-full bg-whatsapp-bg">
+      <div className="bg-whatsapp-green text-white px-4 py-3 flex items-center justify-between shadow-md">
+        <div className="flex items-center">
+          <ArrowLeft className="w-5 h-5 mr-3" onClick={() => setStarted(false)} />
+          <CuyAvatar />
+          <div className="ml-2">
+            <div className="font-medium">Kututu BCP</div>
+            <div className="text-xs opacity-80">
+              {loading ? "escribiendo..." : "en línea"}
             </div>
-            <button>
-              <MoreVertical className="w-5 h-5" />
-            </button>
           </div>
+        </div>
+        <div className="flex items-center space-x-4">
+          {cuyCoins > 0 && (
+            <div className={cn(
+              "transition-all duration-300",
+              showReward && "scale-125"
+            )}>
+              <CuyCoins count={cuyCoins} />
+            </div>
+          )}
+          <MoreVertical className="w-5 h-5" />
+        </div>
+      </div>
 
-          {/* Chat messages area */}
-          <div className="flex-1 overflow-y-auto p-4 bg-chat-background bg-opacity-30">
-            {sections.map((section, sectionIndex) => (
-              <div key={section.id} className="mb-4">
-                {section.messages.map((message, messageIndex) => (
-                  <ChatMessage
-                    key={message.id}
-                    id={message.id}
-                    content={message.content}
-                    type={message.type}
-                    timestamp={message.timestamp}
-                    hasEmoji={message.hasEmoji}
-                    hasImage={message.hasImage}
-                    showAvatar={message.showAvatar}
-                    isTyping={message.isTyping}
-                    isPin={message.isPin}
-                  />
-                ))}
-
-                {section.component === "progress" && section.componentProps && (
-                  <div className="my-4 mx-auto max-w-xs">
-                    <ProgressIndicator 
-                      steps={section.componentProps.steps} 
-                      currentStep={section.componentProps.currentStep} 
-                      labels={section.componentProps.labels} 
-                    />
-                  </div>
-                )}
-
-                {section.component === "risk" && section.componentProps && (
-                  <div className="my-4 mx-auto">
-                    <RiskIndicator 
-                      level={section.componentProps.level} 
-                      message={section.componentProps.message} 
-                    />
-                  </div>
-                )}
-
-                {section.component === "reward" && section.componentProps && (
-                  <div className="my-4 flex justify-center">
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center max-w-xs">
-                      <h4 className="font-medium text-yellow-800">{section.componentProps.achievement}</h4>
-                      <div className="flex justify-center items-center my-2">
-                        <CuyCoins count={section.componentProps.coins} size="lg" />
-                      </div>
-                      <p className="text-sm text-yellow-700">¡Felicidades! Has ganado puntos de resiliencia</p>
-                    </div>
-                  </div>
-                )}
-
-                {section.component === "testimonial" && section.componentProps && (
-                  <div className="my-4">
-                    <TestimonialCard 
-                      name={section.componentProps.name}
-                      business={section.componentProps.business}
-                      location={section.componentProps.location}
-                      quote={section.componentProps.quote}
-                      imageSrc={section.componentProps.imageSrc}
-                    />
-                  </div>
-                )}
-
-                {section.component === "roadmap" && section.componentProps && (
-                  <div className="my-4">
-                    <CoursesRoadmap 
-                      courses={section.componentProps} 
-                      onSelectCourse={handleSelectCourse} 
-                    />
-                  </div>
-                )}
-
-                {sectionIndex === sections.length - 1 && section.quickReplies && (
-                  <div className="mt-2">
-                    <QuickReply
-                      options={section.quickReplies}
-                      onSelect={handleQuickReply}
-                      className="flex flex-wrap justify-center"
-                    />
-                  </div>
-                )}
-              </div>
+      <div className="flex-1 overflow-y-auto p-4 bg-chat-pattern">
+        {sections.map((section, sectionIndex) => (
+          <div key={section.id} className="mb-4">
+            {section.messages.map((message) => (
+              <ChatMessage key={message.id} {...message} />
             ))}
-            
-            {loading && (
-              <ChatMessage
-                id={`typing-${Date.now()}`}
-                content=""
-                type="received"
-                timestamp={new Date()}
-                isTyping={true}
+
+            {section.component && section.componentProps && (
+              renderComponent(section.component, section.componentProps)
+            )}
+
+            {section.quickReplies && (
+              <QuickReply
+                options={section.quickReplies}
+                onSelect={handleQuickReply}
+                className="mt-1"
               />
             )}
-            
-            <div ref={messagesEndRef} />
           </div>
+        ))}
 
-          {/* Input area */}
-          <div className="bg-white p-2 flex items-center border-t border-gray-200">
-            <button className="p-2 text-gray-500">
-              <Paperclip className="w-5 h-5" />
-            </button>
-            <input
-              type="text"
-              value={currentMessage}
-              onChange={(e) => setCurrentMessage(e.target.value)}
-              placeholder="Escribe un mensaje..."
-              className="flex-1 p-2 outline-none"
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            />
-            {currentMessage ? (
-              <button className="p-2 text-whatsapp-green" onClick={handleSendMessage}>
-                <Send className="w-5 h-5" />
-              </button>
-            ) : (
-              <button className="p-2 text-gray-500">
-                <Mic className="w-5 h-5" />
-              </button>
-            )}
-          </div>
+        {loading && (
+          <ChatMessage
+            id="typing"
+            content=""
+            type="received"
+            timestamp={new Date()}
+            isTyping={true}
+          />
+        )}
 
-          {/* Cuy coins display */}
-          <div className={cn(
-            "fixed top-4 right-4 transition-all duration-300 transform",
-            showReward ? "scale-125" : "scale-100"
-          )}>
-            <CuyCoins count={cuyCoins} size="md" />
-          </div>
-        </>
-      )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      <div className="bg-gray-100 p-2 px-4 flex items-center border-t border-gray-200">
+        <button className="text-gray-500 mr-2">
+          <Paperclip className="w-5 h-5" />
+        </button>
+        
+        <input
+          type="text"
+          value={currentMessage}
+          onChange={(e) => setCurrentMessage(e.target.value)}
+          placeholder={
+            verifyingPin 
+              ? "Ingresa el PIN del desafío..." 
+              : waitingForReadyConfirmation 
+                ? "Escribe 'Estoy listo' cuando quieras continuar..." 
+                : `Escribe un mensaje, ${userName}...`
+          }
+          className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:border-whatsapp-green bg-white text-gray-800"
+          onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+        />
+        
+        {currentMessage ? (
+          <button
+            className="ml-2 bg-whatsapp-green rounded-full p-2 text-white"
+            onClick={handleSendMessage}
+          >
+            <Send className="w-5 h-5" />
+          </button>
+        ) : (
+          <button className="ml-2 text-gray-500">
+            <Mic className="w-5 h-5" />
+          </button>
+        )}
+      </div>
     </div>
   );
 };

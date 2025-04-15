@@ -2,7 +2,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Quote, ExternalLink } from "lucide-react";
-import CuyCoins from "./CuyCoins";
 
 interface TestimonialCardProps {
   name: string;
@@ -11,7 +10,6 @@ interface TestimonialCardProps {
   quote: string;
   imageSrc: string;
   className?: string;
-  rewardPoints?: number;
 }
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({
@@ -21,7 +19,6 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
   quote,
   imageSrc,
   className,
-  rewardPoints
 }) => {
   return (
     <div
@@ -56,16 +53,9 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         <div className="bg-bcp-orange bg-opacity-10 text-bcp-orange text-xs px-2 py-1 rounded-full">
           Historia de éxito
         </div>
-        <div className="flex items-center gap-2">
-          {rewardPoints && (
-            <div className="flex items-center text-xs text-gray-600">
-              Ganarás: <CuyCoins count={rewardPoints} size="sm" className="ml-1" />
-            </div>
-          )}
-          <a href="#" className="text-bcp-blue flex items-center text-xs font-medium hover:underline">
-            Ver historia completa <ExternalLink className="w-3 h-3 ml-1" />
-          </a>
-        </div>
+        <a href="#" className="text-bcp-blue flex items-center text-xs font-medium hover:underline">
+          Ver historia completa <ExternalLink className="w-3 h-3 ml-1" />
+        </a>
       </div>
     </div>
   );
